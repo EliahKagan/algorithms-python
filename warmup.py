@@ -54,8 +54,8 @@ def sort_with_odds_first(nums):
 
 def find_index(values, value):
     """
-    Does sequential search in values for key. Returns an index where the key
-    appears, or None if the sequences of values doesn't contain the key.
+    Does sequential search in values for the value. Returns an index where the
+    key appears, or None if the sequences of values doesn't contain the value.
 
     >>> a = [1, 7, 4, 9, 2, 6, 1, 8, 3, -5]
     >>> find_index(a, 3)
