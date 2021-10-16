@@ -196,8 +196,9 @@ def benchmark_sorts(values):
         copied_values = values[:]
         duration = timeit(lambda: sorter(copied_values), number=1)
         if copied_values != sorted_values:
-            raise AssertionError('Sorting failed!')
-        print(f'On {quantity}, {sorter.__name__} took {duration * 1000} ms.')
+            raise AssertionError(f'Sorting with {sorter.__name__} failed!')
+        formatted_duration = f'{(duration * 1000):.0f} ms'
+        print(f'On {quantity}, {sorter.__name__} took {formatted_duration}.')
 
 
 __all__ = [thing.__name__ for thing in (
