@@ -2,6 +2,10 @@
     "cSpell.words": [
         "bottomup",
         "nums",
+        "quux",
         "timeit"
+    ],
+    "cSpell.ignoreWords": [
+        "speggs"
     ]
 }

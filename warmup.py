@@ -192,6 +192,8 @@ def benchmark_sorts(values):
     quantity = '1 value' if len(values) == 1 else f'{len(values)} values'
 
     for sorter in (insertion_sort, mergesort, mergesort_bottomup):
+        # Pylint wrongly thinks hoisting the copy out of the loop would be OK.
+        # pylint: disable=cell-var-from-loop
         copied_values = values[:]
         duration = timeit(lambda: sorter(copied_values), number=1)
         if copied_values != sorted_values:
