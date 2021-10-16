@@ -193,7 +193,7 @@ def benchmark_sorts(values):
 
     for sorter in (insertion_sort, mergesort, mergesort_bottomup):
         copied_values = values[:]
-        duration = timeit(lambda: insertion_sort(copied_values), number=1)
+        duration = timeit(lambda: sorter(copied_values), number=1)
         if copied_values != sorted_values:
             raise AssertionError('Sorting failed!')
         print(f'On {quantity}, {sorter.__name__} took {duration * 1000} ms.')
