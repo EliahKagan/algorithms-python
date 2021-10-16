@@ -1,5 +1,7 @@
 """helpers - Some helper functions used in multiple modules."""
 
+import functools
+
 
 def optional_key_selector(function):
     """
@@ -7,16 +9,12 @@ def optional_key_selector(function):
     argument (as used in functions like sort and min that do comparisons),
     replacing it with the identity function (facilitating "raw" comparison).
     """
+    @functools.wraps(function)
     def wrapper(*args, key=None, **kwargs):
         if key is None:
             key = lambda x: x
         return function(*args, key=key, *kwargs)
 
-    # FIXME: Use functools.wraps instead.
-    wrapper.__name__ = function.__name__
-    wrapper.__doc__ = function.__doc__
-    wrapper.__module__ = function.__module__
-    wrapper.__wrapped__ = function
     return wrapper
 
 

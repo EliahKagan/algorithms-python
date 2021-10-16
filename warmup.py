@@ -191,9 +191,8 @@ def benchmark_sorts(values):
     for sorter in (insertion_sort, mergesort, mergesort_bottomup):
         # Pylint wrongly thinks hoisting the copy out of the loop would be OK.
         # pylint: disable=cell-var-from-loop
-        # Pylint thinks key= is mandatory (it doesn't understand my decorator).
+        # Pylint doesn't understand decorators and thinks key= is mandatory.
         # pylint: disable=missing-kwoa
-        # FIXME: How about when @optional_key_selector uses @functools.wraps?
         copied_values = values[:]
         duration = timeit(lambda: sorter(copied_values), number=1)
         if copied_values != sorted_values:
