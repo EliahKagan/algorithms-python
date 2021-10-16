@@ -9,6 +9,8 @@ https://github.com/EliahKagan/algorithms-suggestions/blob/master/algorithms-sugg
 (but adapted to Python).
 """
 
+from helpers import optional_key_selector
+
 
 class Node:
     """
@@ -170,7 +172,8 @@ def index(head, value):
     raise ValueError(f'{value!r} is not in linked list')
 
 
-def remove_min(head, key=None):
+@optional_key_selector
+def remove_min(head, *, key):
     """
     Removes the node with the minimum value (using a custom key selector if
     provided).
@@ -182,7 +185,7 @@ def remove_min(head, key=None):
     >>> h = remove_min(h)
     >>> h
     Node('foo', Node('baz', Node('quux', Node('foobar'))))
-    >>> h = remove_min(h, len)
+    >>> h = remove_min(h, key=len)
     >>> h
     Node('baz', Node('quux', Node('foobar')))
     >>> remove_min(Node('a parrot'))
@@ -191,9 +194,6 @@ def remove_min(head, key=None):
       File "<stdin>", line 1, in <module>
     ValueError: empty linked list has no minimum value
     """
-    if key is None:
-        key = lambda x: x
-
     if head is None:
         raise ValueError('empty linked list has no minimum value')
 

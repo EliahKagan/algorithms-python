@@ -7,6 +7,7 @@ https://github.com/EliahKagan/algorithms-suggestions/blob/master/algorithms-sugg
 """
 
 from timeit import timeit
+from helpers import optional_key_selector
 
 
 def put(values):
@@ -51,7 +52,7 @@ def sort_with_odds_first(nums):
     nums.sort(key=lambda num: (num % 2 == 0, num))
 
 
-def find_index(values, key):
+def find_index(values, value):
     """
     Does sequential search in values for key. Returns an index where the key
     appears, or None if the sequences of values doesn't contain the key.
@@ -65,12 +66,13 @@ def find_index(values, key):
     >>>
     """
     try:
-        return values.index(key)
+        return values.index(value)
     except ValueError:
         return None
 
 
-def insertion_sort(values, key=None):
+@optional_key_selector
+def insertion_sort(values, *, key):
     """
     Sorts values in place by insertion sort, using the key selector if given.
 
@@ -85,9 +87,6 @@ def insertion_sort(values, key=None):
     >>> a
     [1, 1, 2, 3, 4, -5, 6, 7, 8, 9]
     """
-    if key is None:
-        key = lambda x: x
-
     for right in range(1, len(values)):
         for left in range(right, 0, -1):
             if key(values[left - 1]) <= key(values[left]):
@@ -122,7 +121,8 @@ def _merge(values, low, mid, high, aux, key):
     aux.clear()
 
 
-def mergesort(values, key=None):
+@optional_key_selector
+def mergesort(values, *, key):
     """
     Sorts values in place by recursive top-down mergesort, using the key
     selector if given.
@@ -138,8 +138,6 @@ def mergesort(values, key=None):
     >>> a
     [1, 1, 2, 3, 4, -5, 6, 7, 8, 9]
     """
-    if key is None:
-        key = lambda x: x
     aux = []
 
     def mergesort_sublist(low, high):
@@ -154,7 +152,8 @@ def mergesort(values, key=None):
     mergesort_sublist(0, len(values))
 
 
-def mergesort_bottomup(values, key=None):
+@optional_key_selector
+def mergesort_bottomup(values, *, key):
     """
     Sorts values in place by iterative bottom-up mergesort, using the key
     selector if given.
@@ -170,8 +169,6 @@ def mergesort_bottomup(values, key=None):
     >>> a
     [1, 1, 2, 3, 4, -5, 6, 7, 8, 9]
     """
-    if key is None:
-        key = lambda x: x
     aux = []
 
     delta = 1
@@ -194,6 +191,9 @@ def benchmark_sorts(values):
     for sorter in (insertion_sort, mergesort, mergesort_bottomup):
         # Pylint wrongly thinks hoisting the copy out of the loop would be OK.
         # pylint: disable=cell-var-from-loop
+        # Pylint thinks key= is mandatory (it doesn't understand my decorator).
+        # pylint: disable=missing-kwoa
+        # FIXME: How about when @optional_key_selector uses @functools.wraps?
         copied_values = values[:]
         duration = timeit(lambda: sorter(copied_values), number=1)
         if copied_values != sorted_values:
