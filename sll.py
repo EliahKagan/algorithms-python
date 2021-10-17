@@ -1051,6 +1051,73 @@ def reverse_copy(head):
     return acc
 
 
+def split_by(head, predicate):
+    """
+    Splits a list into two lists based on matching a predicate.
+    Returns a tuple of the matching list followed by the non-matching list.
+
+    >>> split_by(make_from(range(1, 8)), lambda x: x % 2 == 0)
+    (Node(2, Node(4, Node(6))), Node(1, Node(3, Node(5, Node(7)))))
+    >>> split_by(make_from(range(1, 8)), lambda x: x < 8)
+    (Node(1, Node(2, Node(3, Node(4, Node(5, Node(6, Node(7))))))), None)
+    >>> split_by(make_from(range(1, 8)), lambda x: x <= 0)
+    (None, Node(1, Node(2, Node(3, Node(4, Node(5, Node(6, Node(7))))))))
+    """
+    yes = yes_sentinel = Node(None)
+    no = no_sentinel = Node(None)
+
+    while head:
+        if predicate(head.value):
+            yes.next = head
+            yes = yes.next
+        else:
+            no.next = head
+            no = no.next
+
+        head = head.next
+
+    yes.next = no.next = None
+
+    return yes_sentinel.next, no_sentinel.next
+
+
+@helpers.optional_key_selector
+def merge(head1, head2, *, key):
+    """
+    Merges two separate sorted linked lists into a single sorted linked list.
+    In case of ties, nodes from the first (head1) list precede those from the
+    second (head2) list.
+
+    >>> merge(None, Node('a parrot'))
+    Node('a parrot')
+    >>> merge(Node('a parrot'), None)
+    Node('a parrot')
+    >>> put(merge(make(1, 3, 4, 5, 7, 15, 15, 28), make_from(range(4, 18))))
+    1, 3, 4, 4, 5, 5, 6, 7, 7, 8, 9, 10, 11, 12, 13, 14, 15, 15, 15, 16, 17, 28.
+    >>> put(merge(make(10, 20, 30, 40, 50), make_from(range(11, 25))))
+    10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 20, 21, 22, 23, 24, 30, 40, 50.
+    >>> put(merge(make('ham', 'spam', 'eggs', 'speggs'),
+    ...           make('foo', 'bar', 'baz', 'quux', 'foobar'),
+    ...           key=len))
+    ham, foo, bar, baz, spam, eggs, quux, speggs, foobar.
+    """
+    sentinel = Node(None)
+    pre = sentinel
+
+    while head1 and head2:
+        if key(head2.value) < key(head1.value):
+            pre.next = head2
+            head2 = head2.next
+        else:
+            pre.next = head1
+            head1 = head1.next
+
+        pre = pre.next
+
+    pre.next = head1 or head2
+    return sentinel.next
+
+
 __all__ = [thing.__name__ for thing in (
     Node,
     make_from,
@@ -1082,6 +1149,8 @@ __all__ = [thing.__name__ for thing in (
     copy_alt,
     reverse,
     reverse_copy,
+    split_by,
+    merge,
 )]
 
 
