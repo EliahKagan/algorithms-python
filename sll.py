@@ -495,6 +495,98 @@ def advance(head, distance):
     return head
 
 
+def split_at(head, index):
+    """
+    Splits a linked list at the specified index, which is the number of nodes
+    in the first list. The index must be strictly positive. Returns the head of
+    the second list, or None if the index exceeds the length of the list.
+
+    >>> split_at(None, 0)
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ValueError: refusing to split at a non-positive index
+    >>> split_at(None, 1)
+    >>> split_at(None, 100)
+    >>> split_at(Node('a parrot'), 0)
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ValueError: refusing to split at a non-positive index
+    >>> split_at(Node('a parrot'), 1)
+    >>> split_at(Node('a parrot'), 2)
+    >>> a1 = make(10, 20)
+    >>> a2 = split_at(a1, 1)
+    >>> a1
+    Node(10)
+    >>> a2
+    Node(20)
+    >>> a3 = make(11, 22)
+    >>> a4 = split_at(a3, 2)
+    >>> a3
+    Node(11, Node(22))
+    >>> a4
+    >>> b1 = make(10, 20, 30)
+    >>> b2 = split_at(b1, 1)
+    >>> b1
+    Node(10)
+    >>> b2
+    Node(20, Node(30))
+    >>> b3 = make(11, 22, 33)
+    >>> b4 = split_at(b3, 2)
+    >>> b3
+    Node(11, Node(22))
+    >>> b4
+    Node(33)
+    >>> b5 = make(101, 202, 303)
+    >>> b6 = split_at(b5, 3)
+    >>> b5
+    Node(101, Node(202, Node(303)))
+    >>> b6
+    >>> split_at(b5, 4)
+    >>> b7 = make(10, 20, 30, 40)
+    >>> b8 = split_at(b7, 1)
+    >>> b7
+    Node(10)
+    >>> b8
+    Node(20, Node(30, Node(40)))
+    >>> b9 = make(11, 22, 33, 44)
+    >>> b10 = split_at(b9, 2)
+    >>> b9
+    Node(11, Node(22))
+    >>> b10
+    Node(33, Node(44))
+    >>> b11 = make(101, 202, 303, 404)
+    >>> b12 = split_at(b11, 3)
+    >>> b11
+    Node(101, Node(202, Node(303)))
+    >>> b12
+    Node(404)
+    >>> b13 = make(111, 222, 333, 444)
+    >>> b14 = split_at(b13, 4)
+    >>> b13
+    Node(111, Node(222, Node(333, Node(444))))
+    >>> b14
+    >>> split_at(b13, 5)
+    >>> split_at(b13, 6)
+    >>> split_at(b13, 100)
+    >>> b13
+    Node(111, Node(222, Node(333, Node(444))))
+    """
+    if index <= 0:
+        raise ValueError('refusing to split at a non-positive index')
+
+    for _ in range(index - 1):
+        if head is None:
+            return None
+        head = head.next
+
+    if head is None:
+        return None
+
+    ret = head.next
+    head.next = None
+    return ret
+
+
 def split(head):
     """
     Splits a linked list into halves. Returns the head of the second half.
@@ -1139,6 +1231,16 @@ def insertion_sort(head, *, key):
     bar, baz, foo, quux, foobar.
     >>> put(insertion_sort(make(40, 20, 10, 19, 8, -5, 36, 15, 0)))
     -5, 0, 8, 10, 15, 19, 20, 36, 40.
+    >>> h = make(1, 7, 4, 9, 2, 6, 1, 8, 3, -5)
+    >>> h = insertion_sort(h)
+    >>> put(h)
+    -5, 1, 1, 2, 3, 4, 6, 7, 8, 9.
+    >>> h = insertion_sort(h, key=lambda x: -x)
+    >>> put(h)
+    9, 8, 7, 6, 4, 3, 2, 1, 1, -5.
+    >>> h = insertion_sort(h, key=abs)
+    >>> put(h)
+    1, 1, 2, 3, 4, -5, 6, 7, 8, 9.
     """
     out_sentinel = Node(None)
 
@@ -1180,6 +1282,16 @@ def insertion_sort_antistable(head, *, key):
     bar, baz, foo, quux, foobar.
     >>> put(insertion_sort_antistable(make(40, 20, 10, 19, 8, -5, 36, 15, 0)))
     -5, 0, 8, 10, 15, 19, 20, 36, 40.
+    >>> h = make(1, 7, 4, 9, 2, 6, 1, 8, 3, -5)
+    >>> h = insertion_sort_antistable(h)
+    >>> put(h)
+    -5, 1, 1, 2, 3, 4, 6, 7, 8, 9.
+    >>> h = insertion_sort_antistable(h, key=lambda x: -x)
+    >>> put(h)
+    9, 8, 7, 6, 4, 3, 2, 1, 1, -5.
+    >>> h = insertion_sort_antistable(h, key=abs)
+    >>> put(h)
+    1, 1, 2, 3, 4, -5, 6, 7, 8, 9.
     """
     out_sentinel = Node(None)
 
@@ -1220,6 +1332,16 @@ def insertion_sort_alt(head, *, key):
     bar, baz, foo, quux, foobar.
     >>> put(insertion_sort_alt(make(40, 20, 10, 19, 8, -5, 36, 15, 0)))
     -5, 0, 8, 10, 15, 19, 20, 36, 40.
+    >>> h = make(1, 7, 4, 9, 2, 6, 1, 8, 3, -5)
+    >>> h = insertion_sort_alt(h)
+    >>> put(h)
+    -5, 1, 1, 2, 3, 4, 6, 7, 8, 9.
+    >>> h = insertion_sort_alt(h, key=lambda x: -x)
+    >>> put(h)
+    9, 8, 7, 6, 4, 3, 2, 1, 1, -5.
+    >>> h = insertion_sort_alt(h, key=abs)
+    >>> put(h)
+    1, 1, 2, 3, 4, -5, 6, 7, 8, 9.
     """
     out_sentinel = Node(None)
 
@@ -1236,6 +1358,84 @@ def insertion_sort_alt(head, *, key):
         head = nxt
 
     return reverse(out_sentinel.next)
+
+
+@helpers.optional_key_selector
+def mergesort(head, *, key):
+    """
+    Rearranges the nodes of a linked list in sorted order by recursive top-down
+    mergesort, using the key selector if given.
+
+    >>> put(mergesort(None))
+    .
+    >>> put(mergesort(Node('foo')))
+    foo.
+    >>> put(mergesort(make('foo', 'bar', 'baz', 'quux', 'foobar')))
+    bar, baz, foo, foobar, quux.
+    >>> put(mergesort(make('foo', 'bar', 'baz', 'quux', 'foobar'),
+    ...               key=len))
+    foo, bar, baz, quux, foobar.
+    >>> put(mergesort(make('foo', 'bar', 'baz', 'quux', 'foobar'),
+    ...               key=lambda word: (len(word), word)))
+    bar, baz, foo, quux, foobar.
+    >>> put(mergesort(make(40, 20, 10, 19, 8, -5, 36, 15, 0)))
+    -5, 0, 8, 10, 15, 19, 20, 36, 40.
+    >>> h = make(1, 7, 4, 9, 2, 6, 1, 8, 3, -5)
+    >>> h = mergesort(h)
+    >>> put(h)
+    -5, 1, 1, 2, 3, 4, 6, 7, 8, 9.
+    >>> h = mergesort(h, key=lambda x: -x)
+    >>> put(h)
+    9, 8, 7, 6, 4, 3, 2, 1, 1, -5.
+    >>> h = mergesort(h, key=abs)
+    >>> put(h)
+    1, 1, 2, 3, 4, -5, 6, 7, 8, 9.
+    """
+    if head is None or head.next is None:
+        return head
+
+    mid = split(head)
+    return merge(mergesort(head, key=key), mergesort(mid, key=key), key=key)
+
+
+# FIXME: implement this
+'''
+@helpers.optional_key_selector
+def mergesort_bottomup(head, *, key):
+    """
+    Rearranges the nodes of a linked list in sorted order by iterative
+    bottom-up mergesort, using a key selector if given.
+
+    >>> put(mergesort_bottomup(None))
+    .
+    >>> put(mergesort_bottomup(Node('foo')))
+    foo.
+    >>> put(mergesort_bottomup(make('foo', 'bar', 'baz', 'quux', 'foobar')))
+    bar, baz, foo, foobar, quux.
+    >>> put(mergesort_bottomup(make('foo', 'bar', 'baz', 'quux', 'foobar'),
+    ...                        key=len))
+    foo, bar, baz, quux, foobar.
+    >>> put(mergesort_bottomup(make('foo', 'bar', 'baz', 'quux', 'foobar'),
+    ...                        key=lambda word: (len(word), word)))
+    bar, baz, foo, quux, foobar.
+    >>> put(mergesort_bottomup(make(40, 20, 10, 19, 8, -5, 36, 15, 0)))
+    -5, 0, 8, 10, 15, 19, 20, 36, 40.
+    >>> h = make(1, 7, 4, 9, 2, 6, 1, 8, 3, -5)
+    >>> h = mergesort_bottomup(h)
+    >>> put(h)
+    -5, 1, 1, 2, 3, 4, 6, 7, 8, 9.
+    >>> h = mergesort_bottomup(h, key=lambda x: -x)
+    >>> put(h)
+    9, 8, 7, 6, 4, 3, 2, 1, 1, -5.
+    >>> h = mergesort_bottomup(h, key=abs)
+    >>> put(h)
+    1, 1, 2, 3, 4, -5, 6, 7, 8, 9.
+    """
+    # delta = 1
+    # while True:
+    pass  # FIXME: implement this
+'''
+
 
 
 __all__ = [thing.__name__ for thing in (
@@ -1256,6 +1456,7 @@ __all__ = [thing.__name__ for thing in (
     is_sorted,
     is_sorted_alt,
     advance,
+    split_at,
     split,
     split_alt,
     last,
@@ -1274,6 +1475,7 @@ __all__ = [thing.__name__ for thing in (
     insertion_sort,
     insertion_sort_antistable,
     insertion_sort_alt,
+    mergesort,
 )]
 
 

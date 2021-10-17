@@ -126,8 +126,8 @@ def _merge(values, low, mid, high, aux, key):
 @helpers.optional_key_selector
 def mergesort(values, *, key):
     """
-    Sorts values in place by recursive top-down mergesort, using the key
-    selector if given.
+    Sorts values by recursive top-down mergesort, using the key selector if
+    given. Modifies the list passed in.
 
     >>> a = [1, 7, 4, 9, 2, 6, 1, 8, 3, -5]
     >>> mergesort(a)
@@ -157,8 +157,8 @@ def mergesort(values, *, key):
 @helpers.optional_key_selector
 def mergesort_bottomup(values, *, key):
     """
-    Sorts values in place by iterative bottom-up mergesort, using the key
-    selector if given.
+    Sorts values by iterative bottom-up mergesort, using the key selector if
+    given. Modifies the list passed in.
 
     >>> a = [1, 7, 4, 9, 2, 6, 1, 8, 3, -5]
     >>> mergesort_bottomup(a)
