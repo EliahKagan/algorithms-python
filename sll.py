@@ -1451,8 +1451,6 @@ def mergesort(head, *, key):
     return merge(mergesort(head, key=key), mergesort(mid, key=key), key=key)
 
 
-# FIXME: implement this
-'''
 @helpers.optional_key_selector
 def mergesort_bottomup(head, *, key):
     """
@@ -1484,11 +1482,30 @@ def mergesort_bottomup(head, *, key):
     >>> put(h)
     1, 1, 2, 3, 4, -5, 6, 7, 8, 9.
     """
-    # delta = 1
-    # while True:
-    pass  # FIXME: implement this
-'''
+    sentinel = Node(None, head)
+    total_length = length(head)
+    delta = 1
 
+    while delta < total_length:
+        pre = sentinel
+
+        while pre.next:
+            low = pre.next
+            mid = split_at(low, delta)
+            if mid is None:
+                break
+
+            high = split_at(mid, delta)
+            pre.next = merge(low, mid, key=key)
+            if high is None:
+                break
+
+            pre = last(pre.next)
+            pre.next = high
+
+        delta *= 2
+
+    return sentinel.next
 
 
 __all__ = [thing.__name__ for thing in (
@@ -1530,6 +1547,7 @@ __all__ = [thing.__name__ for thing in (
     insertion_sort_antistable,
     insertion_sort_alt,
     mergesort,
+    mergesort_bottomup,
 )]
 
 
