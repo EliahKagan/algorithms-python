@@ -574,6 +574,96 @@ def split_at(head, index):
     if index <= 0:
         raise ValueError('refusing to split at a non-positive index')
 
+    head = advance(head, index - 1)
+
+    if head is None:
+        return None
+
+    ret = head.next
+    head.next = None
+    return ret
+
+
+def split_at_alt(head, index):
+    """
+    Splits a linked list at the specified index, which is the number of nodes
+    in the first list. The index must be strictly positive. Returns the head of
+    the second list, or None if the index exceeds the length of the list.
+    Alternative implementation, not using advance().
+
+    >>> split_at_alt(None, 0)
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ValueError: refusing to split at a non-positive index
+    >>> split_at_alt(None, 1)
+    >>> split_at_alt(None, 100)
+    >>> split_at_alt(Node('a parrot'), 0)
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ValueError: refusing to split at a non-positive index
+    >>> split_at_alt(Node('a parrot'), 1)
+    >>> split_at_alt(Node('a parrot'), 2)
+    >>> a1 = make(10, 20)
+    >>> a2 = split_at_alt(a1, 1)
+    >>> a1
+    Node(10)
+    >>> a2
+    Node(20)
+    >>> a3 = make(11, 22)
+    >>> a4 = split_at_alt(a3, 2)
+    >>> a3
+    Node(11, Node(22))
+    >>> a4
+    >>> b1 = make(10, 20, 30)
+    >>> b2 = split_at_alt(b1, 1)
+    >>> b1
+    Node(10)
+    >>> b2
+    Node(20, Node(30))
+    >>> b3 = make(11, 22, 33)
+    >>> b4 = split_at_alt(b3, 2)
+    >>> b3
+    Node(11, Node(22))
+    >>> b4
+    Node(33)
+    >>> b5 = make(101, 202, 303)
+    >>> b6 = split_at_alt(b5, 3)
+    >>> b5
+    Node(101, Node(202, Node(303)))
+    >>> b6
+    >>> split_at_alt(b5, 4)
+    >>> b7 = make(10, 20, 30, 40)
+    >>> b8 = split_at_alt(b7, 1)
+    >>> b7
+    Node(10)
+    >>> b8
+    Node(20, Node(30, Node(40)))
+    >>> b9 = make(11, 22, 33, 44)
+    >>> b10 = split_at_alt(b9, 2)
+    >>> b9
+    Node(11, Node(22))
+    >>> b10
+    Node(33, Node(44))
+    >>> b11 = make(101, 202, 303, 404)
+    >>> b12 = split_at_alt(b11, 3)
+    >>> b11
+    Node(101, Node(202, Node(303)))
+    >>> b12
+    Node(404)
+    >>> b13 = make(111, 222, 333, 444)
+    >>> b14 = split_at_alt(b13, 4)
+    >>> b13
+    Node(111, Node(222, Node(333, Node(444))))
+    >>> b14
+    >>> split_at_alt(b13, 5)
+    >>> split_at_alt(b13, 6)
+    >>> split_at_alt(b13, 100)
+    >>> b13
+    Node(111, Node(222, Node(333, Node(444))))
+    """
+    if index <= 0:
+        raise ValueError('refusing to split at a non-positive index')
+
     for _ in range(index - 1):
         if head is None:
             return None
