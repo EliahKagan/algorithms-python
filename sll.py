@@ -206,6 +206,57 @@ def put(head):
     warmup.put(get_values(head))
 
 
+def find(head, value):
+    """
+    Finds the node containing a value in the list starting at head. Returns
+    None if the value is not present.
+
+    >>> h = Node('ham', Node('spam', Node('eggs', Node('speggs'))))
+    >>> find(h, 'ham')
+    Node('ham', Node('spam', Node('eggs', Node('speggs'))))
+    >>> find(h, 'spam')
+    Node('spam', Node('eggs', Node('speggs')))
+    >>> find(h, 'eggs')
+    Node('eggs', Node('speggs'))
+    >>> find(h, 'speggs')
+    Node('speggs')
+    >>> find(h, 'a parrot')
+    >>> find(None, 'ham')
+    >>>
+    """
+    while head:
+        if head.value == value:
+            break
+        head = head.next
+
+    return head
+
+
+def find_alt(head, value):
+    """
+    Finds the node containing a value in the list starting at head. Returns
+    None if the value is not present. Alternative implementation.
+
+    >>> h = Node('ham', Node('spam', Node('eggs', Node('speggs'))))
+    >>> find(h, 'ham')
+    Node('ham', Node('spam', Node('eggs', Node('speggs'))))
+    >>> find(h, 'spam')
+    Node('spam', Node('eggs', Node('speggs')))
+    >>> find(h, 'eggs')
+    Node('eggs', Node('speggs'))
+    >>> find(h, 'speggs')
+    Node('speggs')
+    >>> find(h, 'a parrot')
+    >>> find(None, 'ham')
+    >>>
+    """
+    for node in get_nodes(head):
+        if node.value == value:
+            return node
+
+    return None
+
+
 def find_index(head, value):
     """
     Finds the index of value in the list starting at head. Throws a ValueError
@@ -224,6 +275,10 @@ def find_index(head, value):
     Traceback (most recent call last):
       File "<stdin>", line 1, in <module>
     ValueError: 'a parrot' is not in linked list
+    >>> find_index(None, 'ham')
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ValueError: 'ham' is not in linked list
     """
     for index, indexed_value in enumerate_values(head):
         if indexed_value == value:
@@ -1006,6 +1061,8 @@ __all__ = [thing.__name__ for thing in (
     enumerate_values,
     as_list,
     as_list_alt,
+    find,
+    find_alt,
     find_index,
     find_index_alt,
     remove_min,
