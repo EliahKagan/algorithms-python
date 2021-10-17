@@ -6,8 +6,9 @@ https://github.com/EliahKagan/algorithms-suggestions/blob/master/algorithms-sugg
 (but adapted to Python).
 """
 
-from timeit import timeit
-from helpers import optional_key_selector
+import timeit
+
+import helpers
 
 
 def put(values):
@@ -71,7 +72,7 @@ def find_index(values, value):
         return None
 
 
-@optional_key_selector
+@helpers.optional_key_selector
 def insertion_sort(values, *, key):
     """
     Sorts values in place by insertion sort, using the key selector if given.
@@ -121,7 +122,7 @@ def _merge(values, low, mid, high, aux, key):
     aux.clear()
 
 
-@optional_key_selector
+@helpers.optional_key_selector
 def mergesort(values, *, key):
     """
     Sorts values in place by recursive top-down mergesort, using the key
@@ -152,7 +153,7 @@ def mergesort(values, *, key):
     mergesort_sublist(0, len(values))
 
 
-@optional_key_selector
+@helpers.optional_key_selector
 def mergesort_bottomup(values, *, key):
     """
     Sorts values in place by iterative bottom-up mergesort, using the key
@@ -194,7 +195,7 @@ def benchmark_sorts(values):
         # Pylint doesn't understand decorators and thinks key= is mandatory.
         # pylint: disable=missing-kwoa
         copied_values = values[:]
-        duration = timeit(lambda: sorter(copied_values), number=1)
+        duration = timeit.timeit(lambda: sorter(copied_values), number=1)
         if copied_values != sorted_values:
             raise AssertionError(f'Sorting with {sorter.__name__} failed!')
         formatted_duration = f'{(duration * 1000):.0f} ms'
