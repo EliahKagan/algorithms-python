@@ -4,7 +4,6 @@
 
 import functools
 import itertools
-import sys
 
 
 def _pairwise(values):
@@ -30,7 +29,10 @@ def _pairwise(values):
         pre = cur
 
 
-pairwise = itertools.pairwise if sys.version_info >= (3, 10) else _pairwise
+try:
+    pairwise = itertools.pairwise
+except AttributeError:
+    pairwise = _pairwise
 
 
 def optional_key_selector(function):

@@ -9,8 +9,9 @@ https://github.com/EliahKagan/algorithms-suggestions/blob/master/algorithms-sugg
 (but adapted to Python).
 """
 
-import helpers
 import itertools
+
+import helpers
 import warmup
 
 
