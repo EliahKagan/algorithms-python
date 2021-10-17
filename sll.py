@@ -10,6 +10,8 @@ https://github.com/EliahKagan/algorithms-suggestions/blob/master/algorithms-sugg
 """
 
 import helpers
+import itertools
+import warmup
 
 
 class Node:
@@ -97,14 +99,31 @@ def length(head):
     >>> length(make_from(range(100)))
     100
     """
-    # This could be implemented in terms of the values function defined below,
-    # but since it doesn't need the values, I implement it this way with the
-    # intention that it will run faster.
+    # This could be implemented in terms of the get_values function defined
+    # below, but since it doesn't need the values, I implement it this way with
+    # the intention that it will run faster.
     acc = 0
     while head:
         acc += 1
         head = head.next
     return acc
+
+
+def get_nodes(head):
+    """
+    Yields the nodes of a linked list.
+
+    >>> for x in get_nodes(make('foo', 'bar', 'baz', 'quux', 'foobar')):
+    ...     print(x.value)
+    foo
+    bar
+    baz
+    quux
+    foobar
+    """
+    while head:
+        yield head
+        head = head.next
 
 
 def get_values(head):
@@ -119,6 +138,9 @@ def get_values(head):
     quux
     foobar
     """
+    # This could be implemented in terms of the get_nodes function implemented
+    # above, but I've done it separately with the intention that it will run
+    # slightly faster.
     while head:
         yield head.value
         head = head.next
@@ -163,6 +185,22 @@ def as_list_alt(head):
         ret.append(head.value)
         head = head.next
     return ret
+
+
+def put(head):
+    """
+    Prints all values in the linked list on a line, separated by commas and
+    whitespace, ended with a period.
+
+    >>> h = make(10, 20, 30, 40, 50, 60, 70)
+    >>> put(h)
+    10, 20, 30, 40, 50, 60, 70.
+    >>> put(Node('foo'))
+    foo.
+    >>> put(None)
+    .
+    """
+    warmup.put(get_values(head))
 
 
 def find_index(head, value):
@@ -352,11 +390,299 @@ def is_sorted_alt(head, *, key):
     return True
 
 
+def advance(head, distance):
+    """
+    Returns the node the specified distance away from head. Returns None if
+    there is no such node.
+
+    >>> h = make('first', 'second', 'third', 'fourth', 'fifth')
+    >>> advance(h, -1)
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ValueError: can't advance a negative distance in a singly linked list
+    >>> put(advance(h, 0))
+    first, second, third, fourth, fifth.
+    >>> put(advance(h, 1))
+    second, third, fourth, fifth.
+    >>> put(advance(h, 2))
+    third, fourth, fifth.
+    >>> put(advance(h, 3))
+    fourth, fifth.
+    >>> put(advance(h, 4))
+    fifth.
+    >>> put(advance(h, 5))
+    .
+    >>> put(advance(h, 6))
+    .
+    >>> put(advance(h, 7))
+    .
+    >>> put(advance(h, 1000))
+    .
+    """
+    if distance < 0:
+        raise ValueError(
+            "can't advance a negative distance in a singly linked list")
+
+    for _ in range(distance):
+        if head is None:
+            return None
+        head = head.next
+
+    return head
+
+
+def split(head):
+    """
+    Splits a linked list into halves. Returns the head of the second half.
+    If the number of nodes is odd, the first list has one more node.
+
+    >>> a1 = make(10, 20, 30, 40, 50)
+    >>> a2 = split(a1)
+    >>> put(a1)
+    10, 20, 30.
+    >>> put(a2)
+    40, 50.
+    >>> b1 = make(10, 20, 30, 40, 50, 60)
+    >>> b2 = split(b1)
+    >>> put(b1)
+    10, 20, 30.
+    >>> put(b2)
+    40, 50, 60.
+    >>> c1 = Node('a parrot')
+    >>> c2 = split(c1)
+    >>> put(c1)
+    a parrot.
+    >>> put(c2)
+    .
+    >>> d1 = None
+    >>> d2 = split(d1)
+    >>> put(d1)
+    .
+    >>> put(d2)
+    .
+    >>> e1 = make('foo', 'bar')
+    >>> e2 = split(e1)
+    >>> put(e1)
+    foo.
+    >>> put(e2)
+    bar.
+    >>> f1 = make('jam', 'yam', 'kegs')
+    >>> f2 = split(f1)
+    >>> put(f1)
+    jam, yam.
+    >>> put(f2)
+    kegs.
+    >>> g1 = make('Mary', 'Larry', 'Bari', 'Terry')
+    >>> g2 = split(g1)
+    >>> put(g1)
+    Mary, Larry.
+    >>> put(g2)
+    Bari, Terry.
+    """
+    if head is None:
+        return None
+
+    fast = head.next
+    while fast and fast.next:
+        head = head.next
+        fast = fast.next.next
+
+    mid = head.next
+    head.next = None
+    return mid
+
+
+def split_alt(head):
+    """
+    Splits a linked list into halves. Returns the head of the second half.
+    If the number of nodes is odd, the first list has one more node.
+    Alternative implementation.
+
+    >>> a1 = make(10, 20, 30, 40, 50)
+    >>> a2 = split_alt(a1)
+    >>> put(a1)
+    10, 20, 30.
+    >>> put(a2)
+    40, 50.
+    >>> b1 = make(10, 20, 30, 40, 50, 60)
+    >>> b2 = split_alt(b1)
+    >>> put(b1)
+    10, 20, 30.
+    >>> put(b2)
+    40, 50, 60.
+    >>> c1 = Node('a parrot')
+    >>> c2 = split_alt(c1)
+    >>> put(c1)
+    a parrot.
+    >>> put(c2)
+    .
+    >>> d1 = None
+    >>> d2 = split_alt(d1)
+    >>> put(d1)
+    .
+    >>> put(d2)
+    .
+    >>> e1 = make('foo', 'bar')
+    >>> e2 = split_alt(e1)
+    >>> put(e1)
+    foo.
+    >>> put(e2)
+    bar.
+    >>> f1 = make('jam', 'yam', 'kegs')
+    >>> f2 = split_alt(f1)
+    >>> put(f1)
+    jam, yam.
+    >>> put(f2)
+    kegs.
+    >>> g1 = make('Mary', 'Larry', 'Bari', 'Terry')
+    >>> g2 = split_alt(g1)
+    >>> put(g1)
+    Mary, Larry.
+    >>> put(g2)
+    Bari, Terry.
+    """
+    total_length = length(head)
+    if total_length < 2:
+        return None
+
+    head = advance(head, (total_length - 1) // 2)
+    mid = head.next
+    head.next = None
+    return mid
+
+
+def last(head):
+    """
+    Finds the last node of a linked list. Returns None if there are no nodes.
+
+    >>> last(None)
+    >>> last(Node(10))
+    Node(10)
+    >>> last(make(10, 20))
+    Node(20)
+    >>> last(make(10, 20, 30))
+    Node(30)
+    >>> last(make_from(range(100)))
+    Node(99)
+    """
+    if head is None:
+        return None
+
+    while head.next:
+        head = head.next
+
+    return head
+
+
+def concat(first, second):
+    """
+    Concatenates two linked lists. Returns the head of the concatenated list.
+
+    >>> put(concat(None, None))
+    .
+    >>> put(concat(None, Node('spam')))
+    spam.
+    >>> put(concat(Node('ham'), None))
+    ham.
+    >>> put(concat(Node('ham'), Node('spam')))
+    ham, spam.
+    >>> put(concat(make(10), make(20, 30)))
+    10, 20, 30.
+    >>> put(concat(make(10, 20), make(30, 40)))
+    10, 20, 30, 40.
+    >>> put(concat(make_from(range(10)), make_from(range(15, 20))))
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 15, 16, 17, 18, 19.
+    """
+    sentinel = Node(None, first)
+    last(sentinel).next = second
+    return sentinel.next
+
+
+def _connect(nodes):
+    """
+    Connects nodes from an iterable in the order in which they were passed.
+    Assumes nodes are distinct. Returns the head node, or None if the iterable
+    was empty.
+
+    This is a helper function for timsort.
+
+    >>> _connect([])
+    >>> _connect([Node(10)])
+    Node(10)
+    >>> _connect([Node(10), Node(20)])
+    Node(10, Node(20))
+    >>> put(_connect([Node(10), Node(20), Node(30)]))
+    10, 20, 30.
+    >>> put(_connect(Node(x) for x in range(10)))
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9.
+    """
+    sentinel = Node(None)
+    chain = itertools.chain((sentinel,), nodes, (None,))
+    for left, right in helpers.pairwise(chain):
+        left.next = right
+    return sentinel.next
+
+
+@helpers.optional_key_selector
+def timsort(head, *, key):
+    """
+    Copies the nodes of a linked list to a Python list, sorts it, and
+    reconnects the nodes.
+
+    >>> put(timsort(None))
+    .
+    >>> put(timsort(Node(10)))
+    10.
+    >>> put(timsort(make(20, 10)))
+    10, 20.
+    >>> put(timsort(make(10, 20)))
+    10, 20.
+    >>> put(timsort(make(1, 7, 4, 9, 2, 6, 1, 8, 3, -5)))
+    -5, 1, 1, 2, 3, 4, 6, 7, 8, 9.
+    """
+    return _connect(sorted(get_nodes(head), key=lambda node: key(node.value)))
+
+
+@helpers.optional_key_selector
+def timsort_alt(head, *, key):
+    """
+    Copies the nodes of a linked list to a Python list, sorts it, and
+    reconnects the nodes.
+
+    >>> put(timsort_alt(None))
+    .
+    >>> put(timsort_alt(Node(10)))
+    10.
+    >>> put(timsort_alt(make(20, 10)))
+    10, 20.
+    >>> put(timsort_alt(make(10, 20)))
+    10, 20.
+    >>> put(timsort_alt(make(1, 7, 4, 9, 2, 6, 1, 8, 3, -5)))
+    -5, 1, 1, 2, 3, 4, 6, 7, 8, 9.
+    """
+    if head is None:
+        return None
+
+    values = []
+    while head:
+        values.append(head)
+        head = head.next
+
+    values.sort(key=lambda node: key(node.value))
+
+    for left, right in helpers.pairwise(values):
+        left.next = right
+    values[-1].next = None
+
+    return values[0]
+
+
 __all__ = [thing.__name__ for thing in (
     Node,
     make_from,
     make,
     length,
+    get_nodes,
     get_values,
     enumerate_values,
     as_list,
@@ -366,6 +692,11 @@ __all__ = [thing.__name__ for thing in (
     remove_min,
     is_sorted,
     is_sorted_alt,
+    advance,
+    split,
+    split_alt,
+    last,
+    concat,
 )]
 
 

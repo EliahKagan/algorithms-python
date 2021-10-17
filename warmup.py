@@ -13,7 +13,8 @@ import helpers
 
 def put(values):
     """
-    Prints values on a line, separated by commas, ended with a period.
+    Prints values on a line, separated by commas and whitespace, ended with a
+    period.
 
     >>> a = [10, 20, 30, 40, 50, 60, 70]
     >>> put(a)
