@@ -35,6 +35,30 @@ except AttributeError:
     pairwise = _pairwise
 
 
+def equal(lhs, rhs):
+    """Tells if two iterables represent the same sequence of values."""
+    lit = iter(lhs)
+    rit = iter(rhs)
+
+    while True:
+        try:
+            lv = next(lit)
+        except StopIteration:
+            try:
+                next(rit)
+            except StopIteration:
+                return True
+            return False
+
+        try:
+            rv = next(rit)
+        except StopIteration:
+            return False
+
+        if lv != rv:
+            return False
+
+
 def optional_key_selector(function):
     """
     A decorator to allow an absent or None value for a keyword-only key

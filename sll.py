@@ -104,9 +104,11 @@ def length(head):
     # below, but since it doesn't need the values, I implement it this way with
     # the intention that it will run faster.
     acc = 0
+
     while head:
         acc += 1
         head = head.next
+
     return acc
 
 
@@ -251,9 +253,11 @@ def find_index_alt(head, value):
     ValueError: 'a parrot' is not in linked list
     """
     index = 0
+
     while head:
         if head.value == value:
             return index
+
         index += 1
         head = head.next
 
@@ -295,6 +299,7 @@ def remove_min(head, *, key):
         if comparand < best_comparand:
             best = pre
             best_comparand = comparand
+
         pre = pre.next
 
     best.next = best.next.next
@@ -381,11 +386,13 @@ def is_sorted_alt(head, *, key):
         return True
 
     pre = key(head.value)
+
     while head.next:
         head = head.next
         cur = key(head.value)
         if cur < pre:
             return False
+
         pre = cur
 
     return True
@@ -427,6 +434,7 @@ def advance(head, distance):
     for _ in range(distance):
         if head is None:
             return None
+
         head = head.next
 
     return head
@@ -619,8 +627,10 @@ def _connect(nodes):
     """
     sentinel = Node(None)
     chain = itertools.chain((sentinel,), nodes, (None,))
+
     for left, right in helpers.pairwise(chain):
         left.next = right
+
     return sentinel.next
 
 
@@ -673,9 +683,317 @@ def timsort_alt(head, *, key):
 
     for left, right in helpers.pairwise(values):
         left.next = right
+
     values[-1].next = None
 
     return values[0]
+
+
+def equal(lhs, rhs):
+    """
+    Tells if two linked lists represent the same sequence of values. This
+    implementation is optimized for the case where the linked lists share a
+    suffix, but it should perform well even if never used in such a case.
+
+    >>> equal(None, None)
+    True
+    >>> equal(Node('a parrot'), None)
+    False
+    >>> equal(None, Node('a parrot'))
+    False
+    >>> equal(Node('a parrot'), Node('a parrot'))
+    True
+    >>> a = Node('a parrot')
+    >>> equal(a, a)
+    True
+    >>> b = make(10, 20)
+    >>> c = make(10, 20)
+    >>> equal(b, b)
+    True
+    >>> equal(b, c)
+    True
+    >>> equal(b, make(10, 11))
+    False
+    >>> d = make(10, 20, 30)
+    >>> e = make(10, 20, 30)
+    >>> equal(d, d)
+    True
+    >>> equal(d, e)
+    True
+    >>> equal(d, make(11, 20, 30))
+    False
+    >>> equal(d, make(10, 21, 30))
+    False
+    >>> equal(d, make(10, 20, 31))
+    False
+    >>> equal(b, d)
+    False
+    >>> equal(d, b)
+    False
+    >>> f = make_from(range(1000))
+    >>> equal(f, f)
+    True
+    >>> equal(f, make_from(range(1000)))
+    True
+    """
+    while lhs is not rhs:
+        if lhs is None or rhs is None or lhs.value != rhs.value:
+            return False
+
+        lhs = lhs.next
+        rhs = rhs.next
+
+    return True
+
+
+def equal_alt(lhs, rhs):
+    """
+    Tells if two linked lists represent the same sequence of values. This is a
+    straightforward implementation, as usually seen.
+
+    >>> equal_alt(None, None)
+    True
+    >>> equal_alt(Node('a parrot'), None)
+    False
+    >>> equal_alt(None, Node('a parrot'))
+    False
+    >>> equal_alt(Node('a parrot'), Node('a parrot'))
+    True
+    >>> a = Node('a parrot')
+    >>> equal_alt(a, a)
+    True
+    >>> b = make(10, 20)
+    >>> c = make(10, 20)
+    >>> equal_alt(b, b)
+    True
+    >>> equal_alt(b, c)
+    True
+    >>> equal_alt(b, make(10, 11))
+    False
+    >>> d = make(10, 20, 30)
+    >>> e = make(10, 20, 30)
+    >>> equal_alt(d, d)
+    True
+    >>> equal_alt(d, e)
+    True
+    >>> equal_alt(d, make(11, 20, 30))
+    False
+    >>> equal_alt(d, make(10, 21, 30))
+    False
+    >>> equal_alt(d, make(10, 20, 31))
+    False
+    >>> equal_alt(b, d)
+    False
+    >>> equal_alt(d, b)
+    False
+    >>> f = make_from(range(1000))
+    >>> equal_alt(f, f)
+    True
+    >>> equal_alt(f, make_from(range(1000)))
+    True
+    """
+    while lhs and rhs:
+        if lhs.value != rhs.value:
+            return False
+
+        lhs = lhs.next
+        rhs = rhs.next
+
+    return not (lhs or rhs)
+
+
+def equal_alt2(lhs, rhs):
+    """
+    Tells if two linked lists represent the same sequence of values. This
+    implementation is expressed in terms of sequence equality for iterables.
+
+    >>> equal_alt2(None, None)
+    True
+    >>> equal_alt2(Node('a parrot'), None)
+    False
+    >>> equal_alt2(None, Node('a parrot'))
+    False
+    >>> equal_alt2(Node('a parrot'), Node('a parrot'))
+    True
+    >>> a = Node('a parrot')
+    >>> equal_alt2(a, a)
+    True
+    >>> b = make(10, 20)
+    >>> c = make(10, 20)
+    >>> equal_alt2(b, b)
+    True
+    >>> equal_alt2(b, c)
+    True
+    >>> equal_alt2(b, make(10, 11))
+    False
+    >>> d = make(10, 20, 30)
+    >>> e = make(10, 20, 30)
+    >>> equal_alt2(d, d)
+    True
+    >>> equal_alt2(d, e)
+    True
+    >>> equal_alt2(d, make(11, 20, 30))
+    False
+    >>> equal_alt2(d, make(10, 21, 30))
+    False
+    >>> equal_alt2(d, make(10, 20, 31))
+    False
+    >>> equal_alt2(b, d)
+    False
+    >>> equal_alt2(d, b)
+    False
+    >>> f = make_from(range(1000))
+    >>> equal_alt2(f, f)
+    True
+    >>> equal_alt2(f, make_from(range(1000)))
+    True
+    """
+    return helpers.equal(get_values(lhs), get_values(rhs))
+
+
+def copy(head):
+    """
+    Copies a singly linked list.
+
+    >>> copy(None)
+    >>> a1 = Node(10)
+    >>> a2 = copy(a1)
+    >>> a2
+    Node(10)
+    >>> a1 == a2
+    False
+    >>> b1 = Node(10, Node(20))
+    >>> b2 = copy(b1)
+    >>> b2
+    Node(10, Node(20))
+    >>> b1 == b2
+    False
+    >>> c1 = make_from(range(10))
+    >>> c2 = copy(c1)
+    >>> put(c2)
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9.
+    >>> c1 == c2
+    False
+    >>> equal(c1, c2)
+    True
+    >>> d1 = make_from(range(1000))
+    >>> d2 = copy(d1)
+    >>> equal(d1, d2)
+    True
+    >>> d1 == d2
+    False
+    """
+    return make_from(get_values(head))
+
+
+def copy_alt(head):
+    """
+    Copies a singly linked list. Alternative implementation.
+
+    >>> copy_alt(None)
+    >>> a1 = Node(10)
+    >>> a2 = copy_alt(a1)
+    >>> a2
+    Node(10)
+    >>> a1 == a2
+    False
+    >>> b1 = Node(10, Node(20))
+    >>> b2 = copy_alt(b1)
+    >>> b2
+    Node(10, Node(20))
+    >>> b1 == b2
+    False
+    >>> c1 = make_from(range(10))
+    >>> c2 = copy_alt(c1)
+    >>> put(c2)
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9.
+    >>> c1 == c2
+    False
+    >>> equal(c1, c2)
+    True
+    >>> d1 = make_from(range(1000))
+    >>> d2 = copy_alt(d1)
+    >>> equal(d1, d2)
+    True
+    >>> d1 == d2
+    False
+    """
+    sentinel = Node(None)
+    pre = sentinel
+
+    while head:
+        pre.next = Node(head.value)
+        pre = pre.next
+        head = head.next
+
+    return sentinel.next
+
+
+def reverse(head):
+    """
+    Reverses a singly linked list in place. Returns the new head node (formerly
+    the last node).
+
+    >>> reverse(None)
+    >>> reverse(Node(10))
+    Node(10)
+    >>> reverse(Node(10, Node(20)))
+    Node(20, Node(10))
+    >>> reverse(make(10, 20, 30))
+    Node(30, Node(20, Node(10)))
+    >>> put(reverse(make_from(range(10))))
+    9, 8, 7, 6, 5, 4, 3, 2, 1, 0.
+    >>> equal(reverse(make_from(range(1000))), make_from(range(999, -1, -1)))
+    True
+    >>> front = make(10, 20, 30)
+    >>> back = last(front)
+    >>> reverse(front) == back
+    True
+    >>> front.next
+    >>>
+    """
+    acc = None
+
+    while head:
+        nxt = head.next
+        head.next = acc
+        acc = head
+        head = nxt
+
+    return acc
+
+
+def reverse_copy(head):
+    """
+    Copies a linked list in reverse order.
+
+    >>> reverse_copy(None)
+    >>> reverse_copy(Node(10))
+    Node(10)
+    >>> reverse_copy(Node(10, Node(20)))
+    Node(20, Node(10))
+    >>> reverse_copy(make(10, 20, 30))
+    Node(30, Node(20, Node(10)))
+    >>> put(reverse_copy(make_from(range(10))))
+    9, 8, 7, 6, 5, 4, 3, 2, 1, 0.
+    >>> equal(reverse_copy(make_from(range(1000))),
+    ...                    make_from(range(999, -1, -1)))
+    True
+    >>> front = make(10, 20, 30)
+    >>> back = last(front)
+    >>> reverse_copy(front) != back
+    True
+    >>> front.next
+    Node(20, Node(30))
+    >>>
+    """
+    acc = None
+
+    while head:
+        acc = Node(head.value, acc)
+        head = head.next
+
+    return acc
 
 
 __all__ = [thing.__name__ for thing in (
@@ -698,6 +1016,15 @@ __all__ = [thing.__name__ for thing in (
     split_alt,
     last,
     concat,
+    timsort,
+    timsort_alt,
+    equal,
+    equal_alt,
+    equal_alt2,
+    copy,
+    copy_alt,
+    reverse,
+    reverse_copy,
 )]
 
 
