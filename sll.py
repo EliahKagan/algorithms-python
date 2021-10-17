@@ -588,6 +588,7 @@ def split(head):
     """
     Splits a linked list into halves. Returns the head of the second half.
     If the number of nodes is odd, the first list has one more node.
+    This implementation uses the "tortoise and hare" method.
 
     >>> a1 = make(10, 20, 30, 40, 50)
     >>> a2 = split(a1)
@@ -649,7 +650,7 @@ def split_alt(head):
     """
     Splits a linked list into halves. Returns the head of the second half.
     If the number of nodes is odd, the first list has one more node.
-    Alternative implementation.
+    Alternative implementation, counting nodes instead of "tortoise and hare."
 
     >>> a1 = make(10, 20, 30, 40, 50)
     >>> a2 = split_alt(a1)
@@ -689,6 +690,61 @@ def split_alt(head):
     kegs.
     >>> g1 = make('Mary', 'Larry', 'Bari', 'Terry')
     >>> g2 = split_alt(g1)
+    >>> put(g1)
+    Mary, Larry.
+    >>> put(g2)
+    Bari, Terry.
+    """
+    if head is None:
+        return None
+
+    return split_at(head, (length(head) + 1) // 2)
+
+
+def split_alt2(head):
+    """
+    Splits a linked list into halves. Returns the head of the second half.
+    If the number of nodes is odd, the first list has one more node.
+    Second alternative implementation, not using split_at().
+
+    >>> a1 = make(10, 20, 30, 40, 50)
+    >>> a2 = split_alt2(a1)
+    >>> put(a1)
+    10, 20, 30.
+    >>> put(a2)
+    40, 50.
+    >>> b1 = make(10, 20, 30, 40, 50, 60)
+    >>> b2 = split_alt2(b1)
+    >>> put(b1)
+    10, 20, 30.
+    >>> put(b2)
+    40, 50, 60.
+    >>> c1 = Node('a parrot')
+    >>> c2 = split_alt2(c1)
+    >>> put(c1)
+    a parrot.
+    >>> put(c2)
+    .
+    >>> d1 = None
+    >>> d2 = split_alt2(d1)
+    >>> put(d1)
+    .
+    >>> put(d2)
+    .
+    >>> e1 = make('foo', 'bar')
+    >>> e2 = split_alt2(e1)
+    >>> put(e1)
+    foo.
+    >>> put(e2)
+    bar.
+    >>> f1 = make('jam', 'yam', 'kegs')
+    >>> f2 = split_alt2(f1)
+    >>> put(f1)
+    jam, yam.
+    >>> put(f2)
+    kegs.
+    >>> g1 = make('Mary', 'Larry', 'Bari', 'Terry')
+    >>> g2 = split_alt2(g1)
     >>> put(g1)
     Mary, Larry.
     >>> put(g2)
@@ -1456,6 +1512,7 @@ __all__ = [thing.__name__ for thing in (
     split_at,
     split,
     split_alt,
+    split_alt2,
     last,
     concat,
     timsort,
