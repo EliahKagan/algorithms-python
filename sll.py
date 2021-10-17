@@ -1084,9 +1084,9 @@ def split_by(head, predicate):
 @helpers.optional_key_selector
 def merge(head1, head2, *, key):
     """
-    Merges two separate sorted linked lists into a single sorted linked list.
-    In case of ties, nodes from the first (head1) list precede those from the
-    second (head2) list.
+    Merges two separate sorted linked lists into a single sorted linked list,
+    using the key selector if given. In case of ties, nodes from the first
+    (head1) list precede those from the second (head2) list.
 
     >>> merge(None, Node('a parrot'))
     Node('a parrot')
@@ -1116,6 +1116,126 @@ def merge(head1, head2, *, key):
 
     pre.next = head1 or head2
     return sentinel.next
+
+
+@helpers.optional_key_selector
+def insertion_sort(head, *, key):
+    """
+    Rearranges the nodes of a linked list in sorted order by insertion sort,
+    using the key selector if given. This implementation is stable, but less
+    adaptive than insertion_sort_antistable or insertion_sort_alt.
+
+    >>> put(insertion_sort(None))
+    .
+    >>> put(insertion_sort(Node('foo')))
+    foo.
+    >>> put(insertion_sort(make('foo', 'bar', 'baz', 'quux', 'foobar')))
+    bar, baz, foo, foobar, quux.
+    >>> put(insertion_sort(make('foo', 'bar', 'baz', 'quux', 'foobar'),
+    ...                    key=len))
+    foo, bar, baz, quux, foobar.
+    >>> put(insertion_sort(make('foo', 'bar', 'baz', 'quux', 'foobar'),
+    ...                    key=lambda word: (len(word), word)))
+    bar, baz, foo, quux, foobar.
+    >>> put(insertion_sort(make(40, 20, 10, 19, 8, -5, 36, 15, 0)))
+    -5, 0, 8, 10, 15, 19, 20, 36, 40.
+    """
+    out_sentinel = Node(None)
+
+    while head:
+        comparand = key(head.value)
+
+        pre = out_sentinel
+        while pre.next and key(pre.next.value) <= comparand:
+            pre = pre.next
+
+        nxt = head.next
+        head.next = pre.next
+        pre.next = head
+        head = nxt
+
+    return out_sentinel.next
+
+
+@helpers.optional_key_selector
+def insertion_sort_antistable(head, *, key):
+    """
+    Rearranges the nodes of a linked list in sorted order by insertion sort,
+    using the key selector if given. This implementation is antistable.
+
+    >>> put(insertion_sort_antistable(None))
+    .
+    >>> put(insertion_sort_antistable(Node('foo')))
+    foo.
+    >>> put(insertion_sort_antistable(
+    ...         make('foo', 'bar', 'baz', 'quux', 'foobar')))
+    bar, baz, foo, foobar, quux.
+    >>> put(insertion_sort_antistable(
+    ...         make('foo', 'bar', 'baz', 'quux', 'foobar'),
+    ...         key=len))
+    baz, bar, foo, quux, foobar.
+    >>> put(insertion_sort_antistable(
+    ...         make('foo', 'bar', 'baz', 'quux', 'foobar'),
+    ...         key=lambda word: (len(word), word)))
+    bar, baz, foo, quux, foobar.
+    >>> put(insertion_sort_antistable(make(40, 20, 10, 19, 8, -5, 36, 15, 0)))
+    -5, 0, 8, 10, 15, 19, 20, 36, 40.
+    """
+    out_sentinel = Node(None)
+
+    while head:
+        comparand = key(head.value)
+
+        pre = out_sentinel
+        while pre.next and key(pre.next.value) < comparand:
+            pre = pre.next
+
+        nxt = head.next
+        head.next = pre.next
+        pre.next = head
+        head = nxt
+
+    return out_sentinel.next
+
+
+@helpers.optional_key_selector
+def insertion_sort_alt(head, *, key):
+    """
+    Rearranges the nodes of a linked list in sorted order by insertion sort,
+    using the key selector if given. This alternative implementation is stable
+    and also maximally adaptive, by sorting the nodes antistably and then
+    reversing them.
+
+    >>> put(insertion_sort_alt(None))
+    .
+    >>> put(insertion_sort_alt(Node('foo')))
+    foo.
+    >>> put(insertion_sort_alt(make('foo', 'bar', 'baz', 'quux', 'foobar')))
+    bar, baz, foo, foobar, quux.
+    >>> put(insertion_sort_alt(make('foo', 'bar', 'baz', 'quux', 'foobar'),
+    ...                    key=len))
+    foo, bar, baz, quux, foobar.
+    >>> put(insertion_sort_alt(make('foo', 'bar', 'baz', 'quux', 'foobar'),
+    ...                    key=lambda word: (len(word), word)))
+    bar, baz, foo, quux, foobar.
+    >>> put(insertion_sort_alt(make(40, 20, 10, 19, 8, -5, 36, 15, 0)))
+    -5, 0, 8, 10, 15, 19, 20, 36, 40.
+    """
+    out_sentinel = Node(None)
+
+    while head:
+        comparand = key(head.value)
+
+        pre = out_sentinel
+        while pre.next and comparand < key(pre.next.value):
+            pre = pre.next
+
+        nxt = head.next
+        head.next = pre.next
+        pre.next = head
+        head = nxt
+
+    return reverse(out_sentinel.next)
 
 
 __all__ = [thing.__name__ for thing in (
@@ -1151,6 +1271,9 @@ __all__ = [thing.__name__ for thing in (
     reverse_copy,
     split_by,
     merge,
+    insertion_sort,
+    insertion_sort_antistable,
+    insertion_sort_alt,
 )]
 
 
