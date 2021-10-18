@@ -4,6 +4,7 @@
 
 import functools
 import itertools
+import random
 
 
 def _pairwise(values):
@@ -113,10 +114,16 @@ def is_sorted(values, *, key):
     return all(key(lhs) <= key(rhs) for lhs, rhs in pairwise(values))
 
 
+def random_values(count):
+    """Generates the specified number of random values in a reasonable range."""
+    return [random.randint(-2**31, 2**31 - 1) for _ in range(count)]
+
+
 __all__ = [thing.__name__ for thing in (
     pairwise,
     optional_key_selector,
     is_sorted,
+    random_values,
 )]
 
 

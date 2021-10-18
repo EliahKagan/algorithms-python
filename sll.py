@@ -10,6 +10,7 @@ https://github.com/EliahKagan/algorithms-suggestions/blob/master/algorithms-sugg
 """
 
 import itertools
+import timeit
 
 import helpers
 import warmup
@@ -1508,6 +1509,38 @@ def mergesort_bottomup(head, *, key):
     return sentinel.next
 
 
+def benchmark_sorts(values):
+    """
+    Benchmarks all the sorting algorithm implementations here, by sorting
+    copies of values with each of them.
+    """
+    total_length = len(values)
+    quantity = '1 value' if total_length == 1 else f'{total_length} values'
+
+    for sorter in (timsort,
+                   timsort_alt,
+                   insertion_sort,
+                   insertion_sort_antistable,
+                   insertion_sort_alt,
+                   mergesort,
+                   mergesort_bottomup):
+        head = make_from(values)
+
+        def sort_head():
+            nonlocal head
+            head = sorter(head)
+
+        duration = timeit.timeit(sort_head, number=1)
+
+        if not (length(head) == total_length and is_sorted(head)):
+            raise AssertionError(f'Sorting with {sorter.__name__} failed!')
+
+        formatted_duration = f'{(duration * 1000):.0f} ms'
+        print(f'On {quantity}, {sorter.__name__} took {formatted_duration}.')
+
+    print()
+
+
 __all__ = [thing.__name__ for thing in (
     Node,
     make_from,
@@ -1548,6 +1581,7 @@ __all__ = [thing.__name__ for thing in (
     insertion_sort_alt,
     mergesort,
     mergesort_bottomup,
+    benchmark_sorts,
 )]
 
 

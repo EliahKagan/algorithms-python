@@ -197,8 +197,10 @@ def benchmark_sorts(values):
         # pylint: disable=missing-kwoa
         copied_values = values[:]
         duration = timeit.timeit(lambda: sorter(copied_values), number=1)
+
         if copied_values != sorted_values:
             raise AssertionError(f'Sorting with {sorter.__name__} failed!')
+
         formatted_duration = f'{(duration * 1000):.0f} ms'
         print(f'On {quantity}, {sorter.__name__} took {formatted_duration}.')
 
