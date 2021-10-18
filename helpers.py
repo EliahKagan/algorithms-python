@@ -38,25 +38,25 @@ except AttributeError:
 
 def equal(lhs, rhs):
     """Tells if two iterables represent the same sequence of values."""
-    lit = iter(lhs)
-    rit = iter(rhs)
+    left_iterator = iter(lhs)
+    right_iterator = iter(rhs)
 
     while True:
         try:
-            lv = next(lit)
+            left_value = next(left_iterator)
         except StopIteration:
             try:
-                next(rit)
+                next(right_iterator)
             except StopIteration:
                 return True
             return False
 
         try:
-            rv = next(rit)
+            right_value = next(right_iterator)
         except StopIteration:
             return False
 
-        if lv != rv:
+        if left_value != right_value:
             return False
 
 
