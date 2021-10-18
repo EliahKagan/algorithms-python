@@ -1,0 +1,2 @@
+# GitHub Linguist: Don't count code in Jupyter checkpoints.
+/**/.ipynb_checkpoints/** linguist-vendored
