@@ -1524,9 +1524,14 @@ def benchmark_sorts(values):
                    insertion_sort_alt,
                    mergesort,
                    mergesort_bottomup):
+        # Pylint doesn't understand decorators and thinks key= is mandatory.
+        # pylint: disable=missing-kwoa
         head = make_from(values)
 
         def sort_head():
+            # Pylint wrongly thinks hoisting a variable out of the loop would
+            # be OK here.
+            # pylint: disable=cell-var-from-loop
             nonlocal head
             head = sorter(head)
 
