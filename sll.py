@@ -3,10 +3,15 @@
 """
 sll - Singly Linked Lists
 
-Implementations of "singly linked lists - creation and traversal" and
-"singly linked lists - other common operations" sections in
+Implementation of the sections
+
+  * singly linked lists - creation and traversal
+  * singly linked lists - other common operations
+  * singly linked lists - topology and cycle detection
+
+but adapted to Python, in:
+
 https://github.com/EliahKagan/algorithms-suggestions/blob/master/algorithms-suggestions.md
-(but adapted to Python).
 """
 
 import itertools
@@ -1546,6 +1551,256 @@ def benchmark_sorts(values):
     print()
 
 
+def has_cycle(head):
+    """
+    Checks if a singly linked list has a cycle, using the tortoise-and-hare
+    method [O(1) auxiliary space].
+
+    Normally it is an invariant of a singly linked list NOT to contain a cycle.
+    Only this and has_cycle_byhash() don't have that as a precondition.
+
+    >>> has_cycle(None)
+    False
+    >>> a = Node('a parrot')
+    >>> has_cycle(a)
+    False
+    >>> a.next = a
+    >>> has_cycle(a)
+    True
+    >>> b = Node('ham', Node('spam'))
+    >>> has_cycle(b)
+    False
+    >>> b.next.next = b
+    >>> has_cycle(b)
+    True
+    >>> b.next.next = b.next
+    >>> has_cycle(b)
+    True
+    >>> b.next.next = None
+    >>> has_cycle(b)
+    False
+    >>> c = make('foo', 'bar', 'baz', 'quux')
+    >>> has_cycle(c)
+    False
+    >>> c.next.next.next = c.next.next
+    >>> has_cycle(c)
+    True
+    >>> c.next.next.next = c.next
+    >>> has_cycle(c)
+    True
+    >>> c.next.next.next = c
+    >>> has_cycle(c)
+    True
+    >>> c.next.next.next = None
+    >>> has_cycle(c)
+    False
+    >>> d = make_from(range(1000))
+    >>> has_cycle(d)
+    False
+    >>> last(d).next = advance(d, 500)
+    >>> has_cycle(d)
+    True
+    """
+    fast = head
+
+    while fast and fast.next:
+        head = head.next
+        fast = fast.next.next
+
+        if head is fast:
+            return True
+
+    return False
+
+
+def has_cycle_byhash(head):
+    """
+    Checks if a singly linked list has a cycle, by hashing each node
+    [O(n) auxiliary space].
+
+    Normally it is an invariant of a singly linked list NOT to contain a cycle.
+    Only this and has_cycle() don't have that as a precondition.
+
+    >>> has_cycle_byhash(None)
+    False
+    >>> a = Node('a parrot')
+    >>> has_cycle_byhash(a)
+    False
+    >>> a.next = a
+    >>> has_cycle_byhash(a)
+    True
+    >>> b = Node('ham', Node('spam'))
+    >>> has_cycle_byhash(b)
+    False
+    >>> b.next.next = b
+    >>> has_cycle_byhash(b)
+    True
+    >>> b.next.next = b.next
+    >>> has_cycle_byhash(b)
+    True
+    >>> b.next.next = None
+    >>> has_cycle_byhash(b)
+    False
+    >>> c = make('foo', 'bar', 'baz', 'quux')
+    >>> has_cycle_byhash(c)
+    False
+    >>> c.next.next.next = c.next.next
+    >>> has_cycle_byhash(c)
+    True
+    >>> c.next.next.next = c.next
+    >>> has_cycle_byhash(c)
+    True
+    >>> c.next.next.next = c
+    >>> has_cycle_byhash(c)
+    True
+    >>> c.next.next.next = None
+    >>> has_cycle_byhash(c)
+    False
+    >>> d = make_from(range(1000))
+    >>> has_cycle_byhash(d)
+    False
+    >>> last(d).next = advance(d, 500)
+    >>> has_cycle_byhash(d)
+    True
+    """
+    seen = set()
+
+    while head:
+        if head in seen:
+            return True
+        seen.add(head)
+        head = head.next
+
+    return False
+
+
+def _advance_longer(head1, head2):
+    """
+    Advances the head of the longer list to a suffix of the same length as the
+    shorter list. Returns the new heads (at least one of which is the same).
+
+    This is a helper function for overlap().
+
+    >>> _advance_longer(None, None)
+    (None, None)
+    >>> _advance_longer(Node(10), None)
+    (None, None)
+    >>> _advance_longer(None, Node(11))
+    (None, None)
+    >>> _advance_longer(make_from(range(100)), None)
+    (None, None)
+    >>> _advance_longer(None, make_from(range(100)))
+    (None, None)
+    >>> _advance_longer(make(10, 20, 30), make(22, 33))
+    (Node(20, Node(30)), Node(22, Node(33)))
+    >>> _advance_longer(make(22, 33), make(10, 20, 30))
+    (Node(22, Node(33)), Node(20, Node(30)))
+    >>> _advance_longer(make_from(range(4)), make_from(range(100)))
+    (Node(0, Node(1, Node(2, Node(3)))), Node(96, Node(97, Node(98, Node(99)))))
+    """
+    leader1 = head1
+    leader2 = head2
+
+    while leader1 and leader2:
+        leader1 = leader1.next
+        leader2 = leader2.next
+
+    while leader1:
+        head1 = head1.next
+        leader1 = leader1.next
+
+    while leader2:
+        head2 = head2.next
+        leader2 = leader2.next
+
+    return head1, head2
+
+
+def overlap(head1, head2):
+    """
+    Checks if two singly linked lists share any nodes. Uses the two-pass O(1)
+    auxiliary space method.
+
+    >>> overlap(None, None)
+    False
+    >>> overlap(Node(10), None)
+    False
+    >>> overlap(None, Node(10))
+    False
+    >>> overlap(Node(10), Node(10))
+    False
+    >>> a = Node(10)
+    >>> overlap(a, a)
+    True
+    >>> overlap(a, Node(5, a))
+    True
+    >>> overlap(Node(5, a), a)
+    True
+    >>> b = make('ham', 'spam', 'eggs', 'speggs', 'foo', 'bar', 'baz', 'quux')
+    >>> overlap(b, advance(b, 4))
+    True
+    >>> overlap(advance(b, 4), b)
+    True
+    >>> overlap(b, last(b))
+    True
+    >>> overlap(last(b), b)
+    True
+    >>> overlap(b, copy(advance(b, 4)))
+    False
+    >>> overlap(copy(advance(b, 4)), b)
+    False
+    """
+    head1, head2 = _advance_longer(head1, head2)
+
+    while head1:
+        assert head2, 'Wrong length computation, second list ran out.'
+        if head1 is head2:
+            return True
+
+        head1 = head1.next
+        head2 = head2.next
+
+    assert head2 is None, 'Wrong length computation, first list ran out.'
+    return False
+
+
+def overlap_byhash(head1, head2):
+    """
+    Checks if two singly linked lists share any nodes.
+    Uses hashing [O(n) space].
+
+    >>> overlap(None, None)
+    False
+    >>> overlap(Node(10), None)
+    False
+    >>> overlap(None, Node(10))
+    False
+    >>> overlap(Node(10), Node(10))
+    False
+    >>> a = Node(10)
+    >>> overlap(a, a)
+    True
+    >>> overlap(a, Node(5, a))
+    True
+    >>> overlap(Node(5, a), a)
+    True
+    >>> b = make('ham', 'spam', 'eggs', 'speggs', 'foo', 'bar', 'baz', 'quux')
+    >>> overlap(b, advance(b, 4))
+    True
+    >>> overlap(advance(b, 4), b)
+    True
+    >>> overlap(b, last(b))
+    True
+    >>> overlap(last(b), b)
+    True
+    >>> overlap(b, copy(advance(b, 4)))
+    False
+    >>> overlap(copy(advance(b, 4)), b)
+    False
+    """
+    return not set(get_nodes(head1)).isdisjoint(get_nodes(head2))
+
+
 __all__ = [thing.__name__ for thing in (
     Node,
     make_from,
@@ -1587,6 +1842,10 @@ __all__ = [thing.__name__ for thing in (
     mergesort,
     mergesort_bottomup,
     benchmark_sorts,
+    has_cycle,
+    has_cycle_byhash,
+    overlap,
+    overlap_byhash,
 )]
 
 
