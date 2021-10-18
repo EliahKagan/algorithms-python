@@ -1697,6 +1697,8 @@ def _advance_longer(head1, head2):
     (Node(22, Node(33)), Node(20, Node(30)))
     >>> _advance_longer(make_from(range(4)), make_from(range(100)))
     (Node(0, Node(1, Node(2, Node(3)))), Node(96, Node(97, Node(98, Node(99)))))
+    >>> _advance_longer(make_from(range(100)), make_from(range(4)))
+    (Node(96, Node(97, Node(98, Node(99)))), Node(0, Node(1, Node(2, Node(3)))))
     """
     leader1 = head1
     leader2 = head2
