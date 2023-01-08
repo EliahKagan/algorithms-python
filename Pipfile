@@ -7,8 +7,9 @@ name = "pypi"
 jupyterlab = "*"
 
 [dev-packages]
+flake8 = "*"
 pylint = "*"
-pycodestyle = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.10"
