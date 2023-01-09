@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-sll - Singly Linked Lists
+Singly Linked Lists
 
 Implementation of the sections
 
@@ -48,8 +48,9 @@ class Node:
 
 def make_from(values):
     """
-    Creates a singly linked list from an iterable of values.
-    Returns the head node (or None if the sequence is empty).
+    Create a singly linked list from an iterable of values.
+
+    Returns the head node. Or if he sequence is empty, returns None.
 
     >>> make_from(())
     >>> make_from(('a parrot',))
@@ -73,7 +74,7 @@ def make_from(values):
 
 def make(*values):
     """
-    Creates a singly linked list from values passed as arguments.
+    Create a singly linked list from values passed as arguments.
 
     >>> make()
     >>> make('a parrot')
@@ -90,8 +91,9 @@ def make(*values):
 
 def length(head):
     """
-    Gets the length of a linked list when given the head node (or None for an
-    empty list).
+    Compute the length of a linked list when given the head node.
+
+    The caller may pass None as head, to indicate an empty linked list.
 
     >>> length(None)
     0
@@ -120,7 +122,7 @@ def length(head):
 
 def get_nodes(head):
     """
-    Yields the nodes of a linked list.
+    Yield the nodes of a linked list.
 
     >>> for x in get_nodes(make('foo', 'bar', 'baz', 'quux', 'foobar')):
     ...     print(x.value)
@@ -137,7 +139,7 @@ def get_nodes(head):
 
 def get_values(head):
     """
-    Yields the values of a linked list.
+    Yield the values of a linked list.
 
     >>> for x in get_values(make('foo', 'bar', 'baz', 'quux', 'foobar')):
     ...     print(x)
@@ -157,7 +159,7 @@ def get_values(head):
 
 def enumerate_values(head, start=0):
     """
-    Enumerates the values in the linked list starting at head.
+    Enumerate the values in the linked list starting at head.
 
     >>> list(enumerate_values(make('foo', 'bar', 'baz', 'quux')))
     [(0, 'foo'), (1, 'bar'), (2, 'baz'), (3, 'quux')]
@@ -169,7 +171,7 @@ def enumerate_values(head, start=0):
 
 def as_list(head):
     """
-    Converts a linked list to a Python list (which is a dynamic array).
+    Convert a linked list to a Python list (which is a dynamic array).
 
     >>> as_list(None)
     []
@@ -181,8 +183,9 @@ def as_list(head):
 
 def as_list_alt(head):
     """
-    Converts a linked list to a Python list (which is a dynamic array).
-    Alternative implementation.
+    Convert a linked list to a Python list (which is a dynamic array).
+
+    This is an alternative implementation of as_list.
 
     >>> as_list_alt(None)
     []
@@ -198,8 +201,9 @@ def as_list_alt(head):
 
 def put(head):
     """
-    Prints all values in the linked list on a line, separated by commas and
-    whitespace, ended with a period.
+    Print a line of the values in a linked list.
+
+    Values are separated by commas and whitespace. The line ends with a period.
 
     >>> h = make(10, 20, 30, 40, 50, 60, 70)
     >>> put(h)
@@ -214,8 +218,10 @@ def put(head):
 
 def find(head, value):
     """
-    Finds the node containing a value in the list starting at head. Returns
-    None if the value is not present.
+    Find the node containing a value in the linked list starting at head.
+
+    Returns the node if found. If multiple nodes have the value, the first one
+    in the linked list is returned. If no node has the value, None is returned.
 
     >>> h = Node('ham', Node('spam', Node('eggs', Node('speggs'))))
     >>> find(h, 'ham')
@@ -240,8 +246,11 @@ def find(head, value):
 
 def find_alt(head, value):
     """
-    Finds the node containing a value in the list starting at head. Returns
-    None if the value is not present. Alternative implementation.
+    Find the node containing a value in the linked list starting at head.
+
+    This is an alternative implementation of find. As in find, this returns the
+    node if found. If multiple nodes have the value, the first one in the
+    linked list is returned. If no node has the value, None is returned.
 
     >>> h = Node('ham', Node('spam', Node('eggs', Node('speggs'))))
     >>> find(h, 'ham')
@@ -265,8 +274,11 @@ def find_alt(head, value):
 
 def find_index(head, value):
     """
-    Finds the index of value in the list starting at head. Throws a ValueError
-    if the value is not present (as list.index and str.index do).
+    Find the index of value in the linked list starting at head.
+
+    If there are multiple occurrences of the value, this returns the lowest
+    index. If there are no occurrences, ValueError is raised (as in list.index
+    and str.index).
 
     >>> h = Node('ham', Node('spam', Node('eggs', Node('speggs'))))
     >>> find_index(h, 'ham')
@@ -295,9 +307,12 @@ def find_index(head, value):
 
 def find_index_alt(head, value):
     """
-    Finds the index of value in the list starting at head. Throws a ValueError
-    if the value is not present (as list.index and str.index do). Alternative
-    implementation.
+    Find the index of value in the linked list starting at head.
+
+    This is an alternative implementation of find_index. As in find_index, if
+    there are multiple occurrences of the value, this returns the lowest index.
+    If there are no occurrences, ValueError is raised (as in list.index and
+    str.index).
 
     >>> h = Node('ham', Node('spam', Node('eggs', Node('speggs'))))
     >>> find_index_alt(h, 'ham')
@@ -328,11 +343,10 @@ def find_index_alt(head, value):
 @helpers.optional_key_selector
 def remove_min(head, *, key):
     """
-    Removes the node with the minimum value (using a custom key selector if
-    provided).
+    Remove the node with the minimum value.
 
-    If multiple values are minimal, the first is removed. If the list is empty,
-    a ValueError is raised.
+    If a custom key selector is provided, it is used. If multiple values are
+    minimal, the first is removed. If the list is empty, ValueError is raised.
 
     >>> h = make('foo', 'bar', 'baz', 'quux', 'foobar')
     >>> h = remove_min(h)
@@ -370,7 +384,7 @@ def remove_min(head, *, key):
 @helpers.optional_key_selector
 def is_sorted(head, *, key):
     """
-    Tells if a linked list is sorted. Uses the key selector if provided.
+    Tell if a linked list is sorted. Uses the key selector, if provided.
 
     >>> is_sorted(make_from(range(1000)))
     True
@@ -409,8 +423,9 @@ def is_sorted(head, *, key):
 @helpers.optional_key_selector
 def is_sorted_alt(head, *, key):
     """
-    Tells if a linked list is sorted. Uses the key selector if provided.
-    Alternative implementation.
+    Tell if a linked list is sorted. Use the key selector, if provided.
+
+    This is an alternative implementation of is_sorted.
 
     >>> is_sorted_alt(make_from(range(1000)))
     True
@@ -461,8 +476,9 @@ def is_sorted_alt(head, *, key):
 
 def advance(head, distance):
     """
-    Returns the node the specified distance away from head. Returns None if
-    there is no such node.
+    Get the node the specified distance away from head.
+
+    If there is no such node, None is returned.
 
     >>> h = make('first', 'second', 'third', 'fourth', 'fifth')
     >>> advance(h, -1)
@@ -503,9 +519,13 @@ def advance(head, distance):
 
 def split_at(head, index):
     """
-    Splits a linked list at the specified index, which is the number of nodes
-    in the first list. The index must be strictly positive. Returns the head of
-    the second list, or None if the index exceeds the length of the list.
+    Split a linked list at the specified index.
+
+    The index is the number of nodes in the first linked list. The index must
+    be strictly positive.
+
+    Returns the head of the second linked list, or None if the index exceeds
+    the length of the linked list.
 
     >>> split_at(None, 0)
     Traceback (most recent call last):
@@ -592,8 +612,10 @@ def split_at(head, index):
 
 def split(head):
     """
-    Splits a linked list into halves. Returns the head of the second half.
-    If the number of nodes is odd, the first list has one more node.
+    Split a linked list into halves. Return the head of the second half.
+
+    If the number of nodes is odd, the first linked list has one more node.
+
     This implementation uses the "tortoise and hare" method.
 
     >>> a1 = make(10, 20, 30, 40, 50)
@@ -654,9 +676,12 @@ def split(head):
 
 def split_alt(head):
     """
-    Splits a linked list into halves. Returns the head of the second half.
-    If the number of nodes is odd, the first list has one more node.
-    Alternative implementation, counting nodes instead of "tortoise and hare."
+    Split a linked list into halves. Return the head of the second half.
+
+    If the number of nodes is odd, the first linked list has one more node.
+
+    This is an alternative implementation of split. This implementation counts
+    nodes instead of using the "tortoise and hare" method.
 
     >>> a1 = make(10, 20, 30, 40, 50)
     >>> a2 = split_alt(a1)
@@ -709,9 +734,12 @@ def split_alt(head):
 
 def split_alt2(head):
     """
-    Splits a linked list into halves. Returns the head of the second half.
-    If the number of nodes is odd, the first list has one more node.
-    Second alternative implementation, not using split_at().
+    Split a linked list into halves. Return the head of the second half.
+
+    If the number of nodes is odd, the first linked list has one more node.
+
+    In this second alternative implementation, which also counts nodes, the
+    split_at function is not used.
 
     >>> a1 = make(10, 20, 30, 40, 50)
     >>> a2 = split_alt2(a1)
@@ -768,7 +796,9 @@ def split_alt2(head):
 
 def last(head):
     """
-    Finds the last node of a linked list. Returns None if there are no nodes.
+    Find the last node of a linked list.
+
+    Returns None if there are no nodes.
 
     >>> last(None)
     >>> last(Node(10))
@@ -791,7 +821,9 @@ def last(head):
 
 def concat(first, second):
     """
-    Concatenates two linked lists. Returns the head of the concatenated list.
+    Concatenate two linked lists.
+
+    Returns the head of the concatenated linked list.
 
     >>> put(concat(None, None))
     .
@@ -816,8 +848,10 @@ def concat(first, second):
 def _connect(nodes):
     """
     Connects nodes from an iterable in the order in which they were passed.
-    Assumes nodes are distinct. Returns the head node, or None if the iterable
-    was empty.
+
+    This assumes nodes are distinct. (But their values need not be distinct.)
+
+    Returns the head node, or None if the iterable was empty.
 
     This is a helper function for timsort.
 
@@ -843,8 +877,7 @@ def _connect(nodes):
 @helpers.optional_key_selector
 def timsort(head, *, key):
     """
-    Copies the nodes of a linked list to a Python list, sorts it, and
-    reconnects the nodes.
+    Copy a linked list's nodes to a Python list, sort them, and reconnect them.
 
     >>> put(timsort(None))
     .
@@ -863,8 +896,10 @@ def timsort(head, *, key):
 @helpers.optional_key_selector
 def timsort_alt(head, *, key):
     """
-    Copies the nodes of a linked list to a Python list, sorts it, and
-    reconnects the nodes.
+    Copy a linked list's nodes to a Python list, sort them, and reconnect them.
+
+    This alternative implementation of timsort uses no other functions in this
+    module. It may, however, use a public function from the helpers module.
 
     >>> put(timsort_alt(None))
     .
@@ -897,9 +932,10 @@ def timsort_alt(head, *, key):
 
 def equal(lhs, rhs):
     """
-    Tells if two linked lists represent the same sequence of values. This
-    implementation is optimized for the case where the linked lists share a
-    suffix, but it should perform well even if never used in such a case.
+    Tell if two linked lists represent the same sequence of values.
+
+    This implementation is optimized for the case where the linked lists share
+    a suffix, but it should perform well even if never used in such a case.
 
     >>> equal(None, None)
     True
@@ -954,8 +990,9 @@ def equal(lhs, rhs):
 
 def equal_alt(lhs, rhs):
     """
-    Tells if two linked lists represent the same sequence of values. This is a
-    straightforward implementation, as usually seen.
+    Tell if two linked lists represent the same sequence of values.
+
+    This is a straightforward implementation, as usually seen.
 
     >>> equal_alt(None, None)
     True
@@ -1010,8 +1047,10 @@ def equal_alt(lhs, rhs):
 
 def equal_alt2(lhs, rhs):
     """
-    Tells if two linked lists represent the same sequence of values. This
-    implementation is expressed in terms of sequence equality for iterables.
+    Tell if two linked lists represent the same sequence of values.
+
+    This implementation is expressed in terms of sequence equality for
+    iterables.
 
     >>> equal_alt2(None, None)
     True
@@ -1059,7 +1098,7 @@ def equal_alt2(lhs, rhs):
 
 def copy(head):
     """
-    Copies a singly linked list.
+    Copy a singly linked list.
 
     >>> copy(None)
     >>> a1 = Node(10)
@@ -1094,7 +1133,7 @@ def copy(head):
 
 def copy_alt(head):
     """
-    Copies a singly linked list. Alternative implementation.
+    Copy a singly linked list. Alternative implementation.
 
     >>> copy_alt(None)
     >>> a1 = Node(10)
@@ -1137,8 +1176,9 @@ def copy_alt(head):
 
 def reverse(head):
     """
-    Reverses a singly linked list in place. Returns the new head node (formerly
-    the last node).
+    Reverse a singly linked list in place.
+
+    This returns the new head node (formerly the last node).
 
     >>> reverse(None)
     >>> reverse(Node(10))
@@ -1171,7 +1211,10 @@ def reverse(head):
 
 def reverse_copy(head):
     """
-    Copies a linked list in reverse order.
+    Copy a linked list in reverse order.
+
+    This does not call any of the copy functions, nor the reverse function.
+    It produces a reversed copy in a simpler, more elegant way.
 
     >>> reverse_copy(None)
     >>> reverse_copy(Node(10))
@@ -1204,8 +1247,9 @@ def reverse_copy(head):
 
 def split_by(head, predicate):
     """
-    Splits a list into two lists based on matching a predicate.
-    Returns a tuple of the matching list followed by the non-matching list.
+    Split a linked list into two linked lists based on matching a predicate.
+
+    This returns a tuple of the matching linked list followed by the non-matching linked list.
 
     >>> split_by(make_from(range(1, 8)), lambda x: x % 2 == 0)
     (Node(2, Node(4, Node(6))), Node(1, Node(3, Node(5, Node(7)))))
@@ -1235,9 +1279,13 @@ def split_by(head, predicate):
 @helpers.optional_key_selector
 def merge(head1, head2, *, key):
     """
-    Merges two separate sorted linked lists into a single sorted linked list,
-    using the key selector if given. In case of ties, nodes from the first
-    (head1) list precede those from the second (head2) list.
+    Merge two separate sorted linked lists into a single sorted linked list.
+
+    This using the key selector if given.
+
+    In case of ties, nodes from the first (head1) linked list precede those
+    from the second (head2) linked list. That is to say that this two-way merge
+    is stable.
 
     >>> merge(None, Node('a parrot'))
     Node('a parrot')
@@ -1272,9 +1320,12 @@ def merge(head1, head2, *, key):
 @helpers.optional_key_selector
 def insertion_sort(head, *, key):
     """
-    Rearranges the nodes of a linked list in sorted order by insertion sort,
-    using the key selector if given. This implementation is stable, but less
-    adaptive than insertion_sort_antistable or insertion_sort_alt.
+    Rearrange the nodes of a linked list in sorted order by insertion sort.
+
+    The custom key selector is used, if given.
+
+    This implementation is stable, but less adaptive than
+    insertion_sort_antistable or insertion_sort_alt.
 
     >>> put(insertion_sort(None))
     .
@@ -1321,8 +1372,11 @@ def insertion_sort(head, *, key):
 @helpers.optional_key_selector
 def insertion_sort_antistable(head, *, key):
     """
-    Rearranges the nodes of a linked list in sorted order by insertion sort,
-    using the key selector if given. This implementation is antistable.
+    Rearrange the nodes of a linked list in sorted order by insertion sort.
+
+    The custom key selector is used, if given.
+
+    This implementation is antistable.
 
     >>> put(insertion_sort_antistable(None))
     .
@@ -1372,10 +1426,12 @@ def insertion_sort_antistable(head, *, key):
 @helpers.optional_key_selector
 def insertion_sort_alt(head, *, key):
     """
-    Rearranges the nodes of a linked list in sorted order by insertion sort,
-    using the key selector if given. This alternative implementation is stable
-    and also maximally adaptive, by sorting the nodes antistably and then
-    reversing them.
+    Rearrange the nodes of a linked list in sorted order by insertion sort.
+
+    The custom key selector is used, if given.
+
+    This alternative implementation is stable and also maximally adaptive, by
+    sorting the nodes anti-stably and then reversing them.
 
     >>> put(insertion_sort_alt(None))
     .
@@ -1422,8 +1478,10 @@ def insertion_sort_alt(head, *, key):
 @helpers.optional_key_selector
 def mergesort(head, *, key):
     """
-    Rearranges the nodes of a linked list in sorted order by recursive top-down
-    mergesort, using the key selector if given.
+    Rearrange the nodes of a linked list in sorted order by recursive top-down
+    mergesort.
+
+    The custom key selector is used, if given.
 
     >>> put(mergesort(None))
     .
@@ -1460,8 +1518,10 @@ def mergesort(head, *, key):
 @helpers.optional_key_selector
 def mergesort_bottomup(head, *, key):
     """
-    Rearranges the nodes of a linked list in sorted order by iterative
-    bottom-up mergesort, using a key selector if given.
+    Rearrange the nodes of a linked list in sorted order by iterative bottom-up
+    mergesort.
+
+    The custom key selector is used, if given.
 
     >>> put(mergesort_bottomup(None))
     .
@@ -1516,8 +1576,12 @@ def mergesort_bottomup(head, *, key):
 
 def benchmark_sorts(values):
     """
-    Benchmarks all the sorting algorithm implementations here, by sorting
-    copies of values with each of them.
+    Benchmark all the sorting algorithm implementations in the sll module.
+
+    This runs and returns timings of all the algorithms implemented in this
+    module. These algorithms sort singly linked lists. The benchmark works by
+    having each implementation sort a newly created linked list whose values
+    are those of the values sequence.
     """
     total_length = len(values)
     quantity = '1 value' if total_length == 1 else f'{total_length} values'
@@ -1553,11 +1617,12 @@ def benchmark_sorts(values):
 
 def has_cycle(head):
     """
-    Checks if a singly linked list has a cycle, using the tortoise-and-hare
-    method [O(1) auxiliary space].
+    Check if a singly linked list has a cycle.
+
+    This uses the tortoise-and-hare method [O(1) auxiliary space].
 
     Normally it is an invariant of a singly linked list NOT to contain a cycle.
-    Only this and has_cycle_byhash() don't have that as a precondition.
+    Only this and has_cycle_byhash (below) don't have that as a precondition.
 
     >>> has_cycle(None)
     False
@@ -1615,11 +1680,12 @@ def has_cycle(head):
 
 def has_cycle_byhash(head):
     """
-    Checks if a singly linked list has a cycle, by hashing each node
-    [O(n) auxiliary space].
+    Check if a singly linked list has a cycle.
+
+    This works by hashing each node [O(n) auxiliary space].
 
     Normally it is an invariant of a singly linked list NOT to contain a cycle.
-    Only this and has_cycle() don't have that as a precondition.
+    Only this and has_cycle (above) don't have that as a precondition.
 
     >>> has_cycle_byhash(None)
     False
@@ -1676,10 +1742,14 @@ def has_cycle_byhash(head):
 
 def _advance_longer(head1, head2):
     """
-    Advances the head of the longer list to a suffix of the same length as the
-    shorter list. Returns the new heads (at least one of which is the same).
+    Get the longest equal-length suffixes of two linked lists.
 
-    This is a helper function for overlap().
+    This advances the head of the longer linked list to a suffix of the same
+    length as the shorter linked list.
+
+    The new heads are returned. (At least one of them is the same as the old.)
+
+    This is a helper function for overlap.
 
     >>> _advance_longer(None, None)
     (None, None)
@@ -1720,8 +1790,9 @@ def _advance_longer(head1, head2):
 
 def overlap(head1, head2):
     """
-    Checks if two singly linked lists share any nodes. Uses the two-pass O(1)
-    auxiliary space method.
+    Check if two singly linked lists share any nodes.
+
+    This uses the two-pass O(1) auxiliary space method.
 
     >>> overlap(None, None)
     False
@@ -1755,21 +1826,25 @@ def overlap(head1, head2):
     head1, head2 = _advance_longer(head1, head2)
 
     while head1:
-        assert head2, 'Wrong length computation, second list ran out.'
+        assert head2, 'Wrong length computation, second linked list ran out.'
+
         if head1 is head2:
             return True
 
         head1 = head1.next
         head2 = head2.next
 
-    assert head2 is None, 'Wrong length computation, first list ran out.'
+    assert head2 is None, (
+        'Wrong length computation, first linked list ran out.'
+    )
     return False
 
 
 def overlap_byhash(head1, head2):
     """
-    Checks if two singly linked lists share any nodes.
-    Uses hashing [O(n) space].
+    Check if two singly linked lists share any nodes.
+
+    This uses hashing [O(n) space].
 
     >>> overlap(None, None)
     False

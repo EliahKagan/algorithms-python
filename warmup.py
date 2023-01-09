@@ -13,8 +13,9 @@ import helpers
 
 def put(values):
     """
-    Prints values on a line, separated by commas and whitespace, ended with a
-    period.
+    Print a line of values.
+
+    Values are separated by commas and whitespace. The line ends with a period.
 
     >>> a = [10, 20, 30, 40, 50, 60, 70]
     >>> put(a)
@@ -29,7 +30,7 @@ def put(values):
 
 def timsort(values):
     """
-    Sorts a list of values in place using Python's sort method for lists.
+    Sort a list of values in place using Python's sort method for lists.
 
     >>> a = [1, 7, 4, 9, 2, 6, 1, 8, 3, -5]
     >>> b = a[:]
@@ -44,7 +45,7 @@ def timsort(values):
 
 def sort_with_odds_first(nums):
     """
-    Sorts a list of numbers in ascending order, but with all odds first.
+    Sort a list of numbers in ascending order, but with all odds first.
 
     >>> a = [1, 7, 4, 9, 2, 6, 1, 8, 3, -5]
     >>> sort_with_odds_first(a)
@@ -56,8 +57,9 @@ def sort_with_odds_first(nums):
 
 def find_index(values, value):
     """
-    Does sequential search in values for the value. Returns an index where the
-    key appears, or None if the sequences of values doesn't contain the value.
+    Do a sequential search in values for the given value.
+
+    If value is present, its index is returned. Otherwise, None is returned.
 
     >>> a = [1, 7, 4, 9, 2, 6, 1, 8, 3, -5]
     >>> find_index(a, 3)
@@ -76,7 +78,7 @@ def find_index(values, value):
 @helpers.optional_key_selector
 def insertion_sort(values, *, key):
     """
-    Sorts values in place by insertion sort, using the key selector if given.
+    Sort values in place by insertion sort, using the key selector if given.
 
     >>> a = [1, 7, 4, 9, 2, 6, 1, 8, 3, -5]
     >>> insertion_sort(a)
@@ -98,9 +100,11 @@ def insertion_sort(values, *, key):
 
 def _merge(values, low, mid, high, aux, key):
     """
-    Merges values[low:mid] and values[mid:high] back into values[:], using
-    aux as auxiliary storage. Each range is assumed to be sorted relative to
-    < with the specified key selector.
+    Merge consecutive slices, using the given auxiliary list.
+
+    This merges values[low:mid] and values[mid:high] back into values[:], using
+    aux as auxiliary storage. Each range is assumed to be sorted relative to <
+    with the specified key selector.
 
     This is a helper function for mergesort and mergesort_bottomup.
     """
@@ -126,8 +130,10 @@ def _merge(values, low, mid, high, aux, key):
 @helpers.optional_key_selector
 def mergesort(values, *, key):
     """
-    Sorts values by recursive top-down mergesort, using the key selector if
-    given. Modifies the list passed in.
+    Sort by recursive top-down mergesort.
+
+    This sorts values by recursive top-down mergesort. If a key selector is
+    supplied, it is used. The values list is modified.
 
     >>> a = [1, 7, 4, 9, 2, 6, 1, 8, 3, -5]
     >>> mergesort(a)
@@ -157,8 +163,10 @@ def mergesort(values, *, key):
 @helpers.optional_key_selector
 def mergesort_bottomup(values, *, key):
     """
-    Sorts values by iterative bottom-up mergesort, using the key selector if
-    given. Modifies the list passed in.
+    Sort by iterative bottom-up mergesort.
+
+    This sorts values by iterative bottom-up mergesort. If a key selector is
+    supplied, it is used. The values list is modified.
 
     >>> a = [1, 7, 4, 9, 2, 6, 1, 8, 3, -5]
     >>> mergesort_bottomup(a)
@@ -184,8 +192,11 @@ def mergesort_bottomup(values, *, key):
 
 def benchmark_sorts(values):
     """
-    Benchmarks all three sorting algorithms implemented here, by sorting copies
-    of values with each of them.
+    Benchmark all three sorting algorithms in the warning module.
+
+    This runs and returns timings of all three sorting algorithms implemented
+    in this module. It works by sorting separate copies of the values sequence
+    with each of them.
     """
     sorted_values = sorted(values)
     quantity = '1 value' if len(values) == 1 else f'{len(values)} values'

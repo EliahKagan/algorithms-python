@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""helpers - Some helper functions used in multiple modules."""
+"""Some helper functions used in multiple modules."""
 
 import functools
 import itertools
@@ -9,7 +9,7 @@ import random
 
 def _pairwise(values):
     """
-    Returns length-2 windows into an iterable.
+    Return length-2 windows into an iterable.
 
     On Python 3.10 and greater, itertools.pairwise exists and should be
     preferred.
@@ -37,7 +37,12 @@ except AttributeError:
 
 
 def equal(lhs, rhs):
-    """Tells if two iterables represent the same sequence of values."""
+    """
+    Tell if two iterables represent the same sequence of values.
+
+    The iterables can be arbitrarily long, so long as at least one of them is
+    finite. They may be consumed. O(1) auxiliary space is used.
+    """
     left_iterator = iter(lhs)
     right_iterator = iter(rhs)
 
@@ -62,9 +67,13 @@ def equal(lhs, rhs):
 
 def optional_key_selector(function):
     """
-    A decorator to allow an absent or None value for a keyword-only key
-    argument (as used in functions like sort and min that do comparisons),
-    replacing it with the identity function (facilitating "raw" comparison).
+    Decorate a function to allow an absent or None value for a "key" argument.
+
+    This decorator allows an absent or None value for a keyword-only key
+    argument, as used in functions like sort and min that do comparisons.
+
+    Such an argument, when passed to the wrapper function, is replaced with the
+    identity function (facilitating "raw" comparison).
     """
     @functools.wraps(function)
     def wrapper(*args, key=None, **kwargs):
@@ -78,7 +87,7 @@ def optional_key_selector(function):
 @optional_key_selector
 def is_sorted(values, *, key):
     """
-    Tells if an iterable is sorted. Uses the key selector if provided.
+    Tell if an iterable is sorted. Use the key selector, if provided.
 
     >>> is_sorted(range(1000))
     True
@@ -115,7 +124,14 @@ def is_sorted(values, *, key):
 
 
 def random_values(count):
-    """Generates the specified number of random values in a reasonable range."""
+    """
+    Generate the specified number of random values in a reasonable range.
+
+    The range of values is the typical range of a 4-byte integer (i.e., the
+    range of a 32-bit signed integer assuming two's complement).
+
+    Returns a Python list of the generated values.
+    """
     return [random.randint(-2**31, 2**31 - 1) for _ in range(count)]
 
 

@@ -1,11 +1,14 @@
 {
     "cSpell.words": [
+        "antistable",
         "bottomup",
         "byhash",
         "kwoa",
+        "mergesort",
         "nums",
         "quux",
-        "timeit"
+        "timeit",
+        "timsort"
     ],
     "cSpell.ignoreWords": [
         "speggs"
