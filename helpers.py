@@ -2,6 +2,13 @@
 
 """Some helper functions used in multiple modules."""
 
+__all__ = [
+    'pairwise',
+    'optional_key_selector',
+    'is_sorted',
+    'random_values',
+]
+
 import functools
 import itertools
 import random
@@ -65,6 +72,11 @@ def equal(lhs, rhs):
             return False
 
 
+def _identity_function(arg):
+    """Return the argument unchanged."""
+    return arg
+
+
 def optional_key_selector(function):
     """
     Decorate a function to allow an absent or None value for a "key" argument.
@@ -78,7 +90,7 @@ def optional_key_selector(function):
     @functools.wraps(function)
     def wrapper(*args, key=None, **kwargs):
         if key is None:
-            key = lambda x: x
+            key = _identity_function
         return function(*args, key=key, *kwargs)
 
     return wrapper
@@ -133,14 +145,6 @@ def random_values(count):
     Returns a Python list of the generated values.
     """
     return [random.randint(-2**31, 2**31 - 1) for _ in range(count)]
-
-
-__all__ = [thing.__name__ for thing in (
-    pairwise,
-    optional_key_selector,
-    is_sorted,
-    random_values,
-)]
 
 
 if __name__ == '__main__':

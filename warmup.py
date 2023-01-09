@@ -6,6 +6,17 @@ https://github.com/EliahKagan/algorithms-suggestions/blob/master/algorithms-sugg
 (but adapted to Python).
 """
 
+__all__ = [
+    'put',
+    'timsort',
+    'sort_with_odds_first',
+    'find_index',
+    'insertion_sort',
+    'mergesort',
+    'mergesort_bottomup',
+    'benchmark_sorts',
+]
+
 import timeit
 
 import helpers
@@ -214,18 +225,6 @@ def benchmark_sorts(values):
 
         formatted_duration = f'{(duration * 1000):.0f} ms'
         print(f'On {quantity}, {sorter.__name__} took {formatted_duration}.')
-
-
-__all__ = [thing.__name__ for thing in (
-    put,
-    timsort,
-    sort_with_odds_first,
-    find_index,
-    insertion_sort,
-    mergesort,
-    mergesort_bottomup,
-    benchmark_sorts,
-)]
 
 
 if __name__ == '__main__':

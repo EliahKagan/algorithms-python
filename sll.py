@@ -14,6 +14,53 @@ but adapted to Python, in:
 https://github.com/EliahKagan/algorithms-suggestions/blob/master/algorithms-suggestions.md
 """
 
+__all__ = [
+    'Node',
+    'make_from',
+    'make',
+    'length',
+    'get_nodes',
+    'get_values',
+    'enumerate_values',
+    'as_list',
+    'as_list_alt',
+    'find',
+    'find_alt',
+    'find_index',
+    'find_index_alt',
+    'remove_min',
+    'is_sorted',
+    'is_sorted_alt',
+    'advance',
+    'split_at',
+    'split',
+    'split_alt',
+    'split_alt2',
+    'last',
+    'concat',
+    'timsort',
+    'timsort_alt',
+    'equal',
+    'equal_alt',
+    'equal_alt2',
+    'copy',
+    'copy_alt',
+    'reverse',
+    'reverse_copy',
+    'split_by',
+    'merge',
+    'insertion_sort',
+    'insertion_sort_antistable',
+    'insertion_sort_alt',
+    'mergesort',
+    'mergesort_bottomup',
+    'benchmark_sorts',
+    'has_cycle',
+    'has_cycle_byhash',
+    'overlap',
+    'overlap_byhash',
+]
+
 import itertools
 import timeit
 
@@ -1249,7 +1296,8 @@ def split_by(head, predicate):
     """
     Split a linked list into two linked lists based on matching a predicate.
 
-    This returns a tuple of the matching linked list followed by the non-matching linked list.
+    This returns a tuple of the matching linked list followed by the
+    non-matching linked list.
 
     >>> split_by(make_from(range(1, 8)), lambda x: x % 2 == 0)
     (Node(2, Node(4, Node(6))), Node(1, Node(3, Node(5, Node(7)))))
@@ -1876,54 +1924,6 @@ def overlap_byhash(head1, head2):
     False
     """
     return not set(get_nodes(head1)).isdisjoint(get_nodes(head2))
-
-
-__all__ = [thing.__name__ for thing in (
-    Node,
-    make_from,
-    make,
-    length,
-    get_nodes,
-    get_values,
-    enumerate_values,
-    as_list,
-    as_list_alt,
-    find,
-    find_alt,
-    find_index,
-    find_index_alt,
-    remove_min,
-    is_sorted,
-    is_sorted_alt,
-    advance,
-    split_at,
-    split,
-    split_alt,
-    split_alt2,
-    last,
-    concat,
-    timsort,
-    timsort_alt,
-    equal,
-    equal_alt,
-    equal_alt2,
-    copy,
-    copy_alt,
-    reverse,
-    reverse_copy,
-    split_by,
-    merge,
-    insertion_sort,
-    insertion_sort_antistable,
-    insertion_sort_alt,
-    mergesort,
-    mergesort_bottomup,
-    benchmark_sorts,
-    has_cycle,
-    has_cycle_byhash,
-    overlap,
-    overlap_byhash,
-)]
 
 
 if __name__ == '__main__':
