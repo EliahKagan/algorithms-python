@@ -3,9 +3,12 @@
         "antistable",
         "bottomup",
         "byhash",
+        "Eliah",
+        "Kagan",
         "kwoa",
         "mergesort",
         "nums",
+        "palgoviz",
         "quux",
         "timeit",
         "timsort"
