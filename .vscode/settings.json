@@ -9,5 +9,11 @@
     ],
     "cSpell.ignoreWords": [
         "speggs"
-    ]
+    ],
+    "python.testing.pytestArgs": [
+        "--doctest-modules",
+        "."
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }
