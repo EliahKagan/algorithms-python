@@ -27,7 +27,7 @@ jobs:
           python-version: 3.11
 
       - name: Install pipenv
-        run: curl -sSL https://raw.githubusercontent.com/EliahKagan/install.python-poetry.org/ci-repro/palgoviz/install-poetry.py | python3 -
+        run: pip install pipenv
 
       - name: Install project with all dependencies
         run: pipenv install -d
