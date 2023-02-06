@@ -1,0 +1,37 @@
+name: "pytest --doctest-modules"
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Test
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-12, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install pipenv
+        run: curl -sSL https://raw.githubusercontent.com/EliahKagan/install.python-poetry.org/ci-repro/palgoviz/install-poetry.py | python3 -
+
+      - name: Install project with all dependencies
+        run: pipenv install -d
+
+      - name: Run all tests
+        run: pipenv run pytest --doctest-modules
+        timeout-minutes: 2
