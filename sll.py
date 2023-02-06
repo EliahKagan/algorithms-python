@@ -1353,7 +1353,9 @@ def merge(head1, head2, *, key):
     >>> merge(Node('a parrot'), None)
     Node('a parrot')
     >>> put(merge(make(1, 3, 4, 5, 7, 15, 15, 28), make_from(range(4, 18))))
-    1, 3, 4, 4, 5, 5, 6, 7, 7, 8, 9, 10, 11, 12, 13, 14, 15, 15, 15, 16, 17, 28.
+    ... # doctest: +NORMALIZE_WHITESPACE
+    1, 3, 4, 4, 5, 5, 6, 7, 7, 8, 9, 10, 11, 12, 13, 14, 15, 15, 15, 16, 17,
+    28.
     >>> put(merge(make(10, 20, 30, 40, 50), make_from(range(11, 25))))
     10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 20, 21, 22, 23, 24, 30, 40, 50.
     >>> put(merge(make('ham', 'spam', 'eggs', 'speggs'),
@@ -1827,9 +1829,13 @@ def _advance_longer(head1, head2):
     >>> _advance_longer(make(22, 33), make(10, 20, 30))
     (Node(22, Node(33)), Node(20, Node(30)))
     >>> _advance_longer(make_from(range(4)), make_from(range(100)))
-    (Node(0, Node(1, Node(2, Node(3)))), Node(96, Node(97, Node(98, Node(99)))))
+    ... # doctest: +NORMALIZE_WHITESPACE
+    (Node(0, Node(1, Node(2, Node(3)))),
+     Node(96, Node(97, Node(98, Node(99)))))
     >>> _advance_longer(make_from(range(100)), make_from(range(4)))
-    (Node(96, Node(97, Node(98, Node(99)))), Node(0, Node(1, Node(2, Node(3)))))
+    ... # doctest: +NORMALIZE_WHITESPACE
+    (Node(96, Node(97, Node(98, Node(99)))),
+     Node(0, Node(1, Node(2, Node(3)))))
     """
     leader1 = head1
     leader2 = head2
