@@ -26,6 +26,9 @@ jobs:
         with:
           python-version: 3.11
 
+      - name: Upgrade PyPA packages
+        run: pip install -U pip setuptools wheel
+
       - name: Install pipenv
         run: pip install pipenv
 
