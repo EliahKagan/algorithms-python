@@ -110,7 +110,7 @@ def make_from(values):
     """
     Create a singly linked list from an iterable of values.
 
-    Returns the head node. Or if he sequence is empty, returns None.
+    Returns the head node. Or if the sequence is empty, returns None.
 
     >>> make_from(())
     >>> make_from(('a parrot',))
