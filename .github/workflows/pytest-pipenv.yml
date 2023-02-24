@@ -1,4 +1,4 @@
-name: "pytest --doctest-modules"
+name: pytest (pipenv)
 
 on: [push, pull_request]
 
