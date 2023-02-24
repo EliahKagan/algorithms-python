@@ -31,7 +31,7 @@ jobs:
 
       - name: Substitute Python version
         run: |
-          perl -i -spwe 's/(?<=^python_version = ")[^"]+(?="$)/$pyver/' -- \
+          perl -i -spwe 's/^python_version = "\K[^"]+(?="$)/$pyver/' -- \
               -pyver=${{ matrix.python-version }} Pipfile
 
       - name: Set up Python
