@@ -24,9 +24,8 @@ jobs:
 
       - name: Substitute Python version
         run: |
-          # We don't need a backup, but sed -i is otherwise less portable.
-          sed -E -i.old 's/^( *- python=).+$/\1${{ matrix.python-version }}/' \
-              environment.yml
+          perl -i -spwe 's/^( *- python=).+$/$1$pyver/' -- \
+              -pyver=${{ matrix.python-version }} environment.yml
 
       - name: Provision with micromamba
         uses: mamba-org/provision-with-micromamba@v15
