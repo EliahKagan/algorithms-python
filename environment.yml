@@ -1,0 +1,11 @@
+name: algorithms-python
+
+channels:
+  - conda-forge
+ 
+dependencies:
+  - python=3.11
+  - flake8
+  - jupyterlab
+  - pylint
+  - pytest
