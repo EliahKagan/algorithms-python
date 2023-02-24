@@ -24,7 +24,7 @@ jobs:
 
       - name: Substitute Python version
         run: |
-          perl -i -spwe 's/^( *- python=).+$/$1$pyver/' -- \
+          perl -i -spwe 's/^ *- python=\K.+$/$pyver/' -- \
               -pyver=${{ matrix.python-version }} environment.yml
 
       - name: Provision with micromamba
