@@ -23,7 +23,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Substitute Python version
-        run: sed -Ei 's/^( *- python=).+$/\1${{ matrix.python-version }}/' environment.yml
+        run: |
+          # We don't need a backup, but sed -i is otherwise less portable.
+          sed -E -i.old 's/^( *- python=).+$/\1${{ matrix.python-version }}/' \
+              environment.yml
 
       - name: Provision with micromamba
         uses: mamba-org/provision-with-micromamba@v15
