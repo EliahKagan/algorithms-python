@@ -1,4 +1,4 @@
-name: pytest (pipenv)
+name: pytest (Pipfile.lock)
 
 on: [push, pull_request]
 
