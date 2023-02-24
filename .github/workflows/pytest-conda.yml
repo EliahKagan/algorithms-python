@@ -10,6 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
 
     runs-on: ${{ matrix.os }}
 
@@ -20,6 +21,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Substitute Python version
+        run: |
+          perl -i -spwe 's/^( *- python=).+$/$1$pyver/' -- \
+              -pyver=${{ matrix.python-version }} environment.yml
 
       - name: Provision with micromamba
         uses: mamba-org/provision-with-micromamba@v15
