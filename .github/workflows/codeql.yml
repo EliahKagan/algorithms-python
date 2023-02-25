@@ -53,8 +53,10 @@ jobs:
 
     - name: Set interpreter
       run: |
-        printf 'CODEQL_PYTHON=%s\n' "$(command -v python)" |
-            tee -a -- "$GITHUB_ENV"
+        CODEQL_PYTHON=$(command -v python)
+        for name in CODEQL_PYTHON PATH; do
+            printf '%s=%s\n' "$name" "${!name}" | tee -a -- "$GITHUB_ENV"
+        done
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
