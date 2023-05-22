@@ -27,7 +27,7 @@ jobs:
               -pyver=${{ matrix.python-version }} environment.yml
 
       - name: Provision with micromamba
-        uses: mamba-org/provision-with-micromamba@v15
+        uses: mamba-org/provision-with-micromamba@v16
 
       - name: Run all tests
         run: pytest --doctest-modules
