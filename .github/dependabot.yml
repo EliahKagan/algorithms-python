@@ -6,7 +6,6 @@ updates:
       interval: "monthly"
     allow:
       - dependency-type: "all"
-    open-pull-requests-limit: 20
     groups:
       python-dependencies:
         patterns: ['*']
@@ -15,3 +14,6 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    groups:
+      github-actions:
+        patterns: ['*']
