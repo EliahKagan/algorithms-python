@@ -91,6 +91,7 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
+          - ubuntu-22.04
           - macos-latest
           # - windows-latest
         python-version:
@@ -103,6 +104,23 @@ jobs:
           - '3.8'
           - '3.7'
         exclude:
+          # Don't test Python 3.7 on Ubuntu >= 24.04 LTS.
+          - os: ubuntu-latest
+            python-version: '3.7'
+          # Only test Python 3.7 on Ubuntu 22.04 LTS.
+          - os: ubuntu-22.04
+            python-version: '3.13'
+          - os: ubuntu-22.04
+            python-version: '3.12'
+          - os: ubuntu-22.04
+            python-version: '3.11'
+          - os: ubuntu-22.04
+            python-version: '3.10'
+          - os: ubuntu-22.04
+            python-version: '3.9'
+          - os: ubuntu-22.04
+            python-version: '3.8'
+          # Don't test Python 3.7 on macOS.
           - os: macos-latest
             python-version: '3.7'
 
