@@ -131,8 +131,16 @@ jobs:
               -pyver=${{ matrix.python-version }} Pipfile
 
       - name: Set up Python
+        if: matrix.os != 'windows-latest'
         uses: actions/setup-python@v5
         with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set up Python
+        if: matrix.os == 'windows-latest'
+        uses: actions/setup-python@v5
+        with:
+          architecture: x64
           python-version: ${{ matrix.python-version }}
 
       - name: Upgrade PyPA packages
