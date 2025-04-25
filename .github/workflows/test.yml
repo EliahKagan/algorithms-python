@@ -2,6 +2,9 @@ name: Test
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   pytest-conda:
     name: pytest (conda)
@@ -191,3 +194,65 @@ jobs:
 
       - name: Analyze shell scripts
         uses: bewuethr/shellcheck-action@v2
+
+  # Check that only jobs intended not to block PR auto-merge are omitted as
+  # dependencies of the `all-pass` job below, so that whenever a job is added,
+  # a decision is made about whether it must pass for PRs to merge.
+  all-pass-meta:
+    runs-on: ubuntu-latest
+
+    env:
+      # List all jobs that are intended NOT to block PR auto-merge here.
+      EXPECTED_NONBLOCKING_JOBS: |-
+        all-pass
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Find this workflow
+        run: |
+          relative_workflow_with_ref="${GITHUB_WORKFLOW_REF#"$GITHUB_REPOSITORY/"}"
+          echo "WORKFLOW_PATH=${relative_workflow_with_ref%@*}" >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ${{ env.WORKFLOW_PATH }}
+
+      - name: Get all jobs
+        run: yq '.jobs | keys.[]' -- "$WORKFLOW_PATH" | sort | tee all-jobs.txt
+
+      - name: Get blocking jobs
+        run: yq '.jobs.all-pass.needs.[]' -- "$WORKFLOW_PATH" | sort | tee blocking-jobs.txt
+
+      - name: Get jobs we intend do not block
+        run: sort <<<"$EXPECTED_NONBLOCKING_JOBS" | tee expected-nonblocking-jobs.txt
+
+      - name: Each job must block PRs or be declared not to
+        run: |
+          sort -m blocking-jobs.txt expected-nonblocking-jobs.txt |
+            diff --color=always -U1000 - all-jobs.txt
+
+  all-pass:
+    name: All tests pass
+
+    needs:
+      - pytest-conda
+      - pytest-pipenv-lock
+      - pytest-pipenv
+      - lint
+      - shellcheck
+      - all-pass-meta
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Some failed
+        if: contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'failure')
+        run: |
+          false
+
+      - name: All passed
+        run: |
+          true
