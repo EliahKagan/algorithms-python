@@ -44,7 +44,7 @@ jobs:
               -pyver=${{ matrix.python-version }} environment.yml
 
       - name: Set up micromamba
-        uses: mamba-org/setup-micromamba@v2
+        uses: mamba-org/setup-micromamba@v3
         with:
           environment-file: environment.yml
 
